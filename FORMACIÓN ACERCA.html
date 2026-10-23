@@ -1,0 +1,1302 @@
+
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#111c33">
+<title>Campus Formación · Grupo Acerca</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;color:#172033}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.loginbox{width:430px;max-width:100%;background:#fff;border:1px solid #e4e8ee;border-radius:16px;padding:38px;box-shadow:0 15px 45px #111c3314}
+.logo{text-align:center;font-size:25px;font-weight:800;color:#111c33}
+.logo small{display:block;color:#7f8ba3;font-size:10px;letter-spacing:2px;margin-top:6px}
+.login h1{text-align:center;font-size:21px;margin:30px 0 8px}
+.sub{text-align:center;color:#718099;font-size:13px;margin-bottom:25px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.role{border:1px solid #e0e5ec;background:#fff;border-radius:9px;padding:13px;font-weight:700}
+.role.active{border-color:#2477e8;background:#e8f1ff;color:#2477e8}
+label{display:block;font-size:12px;font-weight:700;margin:13px 0 6px}
+input,textarea,select{width:100%;border:1px solid #d9dee7;border-radius:8px;padding:11px;outline:0;background:#fff;color:#172033}
+input:focus,textarea:focus,select:focus{border-color:#2477e8}
+.checkrow{display:flex;align-items:center;gap:9px;margin-top:14px;font-size:12px;font-weight:700}.checkrow input{width:auto}
+.manage-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.formgrid .wide{grid-column:1/-1}
+.form-actions,.item-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.secondary{border:1px solid #d9dee7;background:#fff;color:#41516a;border-radius:7px;padding:10px 13px;font-weight:700}
+.topic-card{margin:14px 0;overflow:hidden}
+.topic-top{padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:15px;flex-wrap:wrap;border-bottom:1px solid #e8ebf0}
+.topic-title{font-weight:800;font-size:15px}
+.topic-description{color:#718099;font-size:12px;margin-top:5px;white-space:pre-wrap}
+.topic-items{padding:0 18px}
+.content-row{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #edf0f4;background:#fff;transition:background .15s,opacity .15s}
+.content-row:last-child{border-bottom:0}
+.content-row.dragging{opacity:.4;background:#eef4ff}
+.content-row.drop-target{outline:2px dashed #2477e8;outline-offset:-2px;background:#f2f7ff}.drop-zone.drag-over{background:#eef5ff;box-shadow:inset 0 0 0 2px #2477e8}
+.drag-handle{border:1px solid #cbd7e8;background:#edf3fc;border-radius:7px;padding:8px 9px;color:#2477e8;cursor:grab;font-weight:800;user-select:none;flex-shrink:0;touch-action:none}.drag-handle:active{cursor:grabbing}.danger-button{border:1px solid #f0caca;background:#fff7f7;color:#bd3434;border-radius:7px;padding:10px 13px;font-weight:700}.danger-button:hover{background:#ffeded;border-color:#e7a6a6}
+.drop-zone{min-height:38px;padding:0 18px}
+.drop-zone:empty:after{content:"Arrastra aquí contenidos de esta categoría o usa las flechas para cambiar el orden.";display:block;color:#9aa5b6;font-size:11px;padding:13px 0}
+.lane{border-top:1px solid #edf0f4}
+.lane-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 18px;background:#fafbfc;font-size:12px;font-weight:700;color:#465671}
+.lane-head small{font-size:10px;font-weight:400;color:#8793a6}
+.area-badge{font-size:10px;background:#edf3ff;color:#246ec5;border-radius:15px;padding:5px 8px;white-space:nowrap}
+.sort-actions{display:flex;gap:4px;flex-shrink:0}.sort-actions button{border:1px solid #d9dee7;border-radius:6px;background:#fff;padding:5px 8px;color:#41516a;font-weight:700}
+.sort-actions button:hover{border-color:#2477e8;color:#2477e8}
+@media(max-width:650px){.drop-zone{padding:0 12px}.lane-head{padding:10px 12px}.content-row .mi{min-width:100%;order:2}.drag-handle{order:0}.sort-actions{order:3}}
+.content-row .mi{flex:1;min-width:170px}
+.status-note{font-size:12px;padding:10px 12px;border-radius:7px;margin:12px 0}
+.status-note.ok{background:#e5f6ee;color:#168356}.status-note.bad{background:#fff0f0;color:#c43d3d}
+.resource-frame{width:100%;height:65vh;min-height:360px;border:1px solid #e4e8ee;border-radius:10px}
+.resource-video{width:100%;max-height:65vh;border-radius:10px;background:#111c33}
+@media(max-width:650px){.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}.content-row{align-items:flex-start;flex-wrap:wrap}.content-row .mi{min-width:140px}}
+.primary{width:100%;border:0;border-radius:8px;padding:12px;background:#2477e8;color:#fff;font-weight:700;margin-top:17px}
+.primary:disabled{opacity:.65;cursor:wait}
+.error{background:#fff0f0;border:1px solid #f1cccc;color:#c43d3d;padding:9px;border-radius:7px;font-size:12px;margin-bottom:12px}
+.hint{text-align:center;color:#8994a6;font-size:10px;line-height:1.5;margin-top:16px}
+.app{display:flex;min-height:100vh}
+.side{width:245px;background:#111c33;color:#fff;padding:24px 16px;display:flex;flex-direction:column;flex-shrink:0}
+.brand{font-size:18px;font-weight:750;padding:4px 10px}
+.brand small{display:block;color:#7f8ba3;font-size:10px;letter-spacing:1px;margin-top:5px}
+.nav{margin-top:32px}
+.navtitle{font-size:10px;text-transform:uppercase;color:#73809a;margin:0 10px 10px}
+.navitem{padding:12px 13px;border-radius:9px;margin:4px 0;color:#b9c3d5;font-size:14px;cursor:pointer}
+.navitem:hover,.navitem.active{background:#2477e8;color:#fff}
+.profile{margin-top:auto;border-top:1px solid #28344a;padding-top:16px;display:flex;gap:10px;align-items:center}
+.avatar{width:35px;height:35px;border-radius:50%;background:#2477e8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.profile small{display:block;color:#8793a9;font-size:9px;margin-top:3px;max-width:165px;overflow:hidden;text-overflow:ellipsis}
+.logout{padding:11px 8px;color:#aeb8ca;font-size:13px;cursor:pointer;margin-top:8px}
+.main{flex:1;padding:30px 36px;overflow:auto;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
+.eyebrow{font-size:11px;color:#718099;letter-spacing:.5px}
+.title{font-size:27px;margin:5px 0;font-weight:800}
+.subtitle{font-size:13px;color:#718099}
+.card,.tablebox{background:#fff;border:1px solid #e4e8ee;border-radius:11px;box-shadow:0 1px 2px #00000005}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:24px}
+.stat{padding:19px}
+.stat span{font-size:12px;color:#718099}
+.stat b{display:block;font-size:27px;margin-top:8px}
+.blue{color:#2477e8}.green{color:#1d9b63}.orange{color:#d68120}
+.progress{padding:20px;margin-bottom:22px}
+.phead{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:10px}
+.pbar{height:9px;background:#e7ebf1;border-radius:8px;overflow:hidden}
+.pfill{height:100%;background:#2477e8}
+.notice{padding:15px 17px;border-radius:9px;background:#e8f1ff;color:#275f9f;font-size:12px;margin-bottom:20px}
+.sectionhead{padding:18px 20px;border-bottom:1px solid #e8ebf0}
+.sectiontitle{font-size:16px;font-weight:750}
+.sectionsub{font-size:12px;color:#8290a5;margin-top:4px}
+.module{padding:16px 20px;border-bottom:1px solid #edf0f4;display:flex;align-items:center;gap:13px}
+.module:last-child{border:0}
+.module.locked{opacity:.5}
+.icon{width:36px;height:36px;border-radius:9px;background:#eef2f7;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mi{flex:1;min-width:0}
+.mt{font-size:13px;font-weight:700}
+.mm{font-size:11px;color:#718099;margin-top:4px}
+.badge{font-size:10px;font-weight:700;padding:5px 8px;border-radius:20px;white-space:nowrap}
+.done{background:#e5f6ee;color:#168356}
+.open{background:#e8f1ff;color:#246ec5}
+.lock{background:#edf0f4;color:#7a879a}
+.go{border:0;background:#2477e8;color:#fff;border-radius:7px;padding:8px 11px;font-size:11px;font-weight:700}
+.go:disabled{background:#dfe4eb;color:#8793a4}
+.tablebox{overflow:auto}
+.table{width:100%;border-collapse:collapse;font-size:12px;min-width:760px}
+.table th{text-align:left;color:#75839a;background:#fafbfc;padding:12px 18px;border-bottom:1px solid #e8ebf0}
+.table td{padding:14px 18px;border-bottom:1px solid #edf0f4}
+.table tr:last-child td{border:0}
+.view{color:#2477e8;font-weight:700;cursor:pointer}
+.content{padding:24px}
+.video{height:300px;background:#111c33;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px}
+.play{width:62px;height:62px;border-radius:50%;background:#2477e8;display:flex;align-items:center;justify-content:center;font-size:25px}
+.complete{border:0;background:#1d9b63;color:#fff;padding:11px 15px;border-radius:8px;font-weight:700;margin-top:20px}
+.ppt{height:300px;border-radius:12px;background:#243c63;color:#fff;padding:45px;display:flex;flex-direction:column;justify-content:center}
+.ppt h2{font-size:27px;margin:0 0 10px}
+.ppt p{color:#d8e2f1;font-size:13px}
+.q{padding:18px 0;border-bottom:1px solid #edf0f4}
+.q b{display:block;font-size:13px;margin-bottom:10px}
+.option{display:block;border:1px solid #e0e4eb;padding:9px;border-radius:7px;margin:6px 0;font-weight:400;font-size:12px}
+.option input{width:auto;margin-right:8px}
+.empty{text-align:center;padding:50px;color:#718099;font-size:13px}
+.modal{position:fixed;inset:0;background:#111c3377;display:flex;align-items:center;justify-content:center;padding:20px;z-index:10}
+.modalbox{background:#fff;border-radius:13px;width:min(720px,100%);padding:24px;max-height:90vh;overflow:auto}
+.modalhead{display:flex;justify-content:space-between}
+.close{border:0;background:#eef1f5;border-radius:7px;width:32px;height:32px}
+.detail{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.dstat{background:#f7f8fa;padding:13px;border-radius:8px}
+.dstat small{display:block;color:#718099}
+.dstat b{display:block;margin-top:5px}
+.excel{border:1px solid #d9dee7;background:#fff;padding:10px 13px;border-radius:7px;color:#2477e8;font-weight:700}
+@media(max-width:900px){.side{width:205px}.cards{grid-template-columns:1fr 1fr}.main{padding:22px}}
+@media(max-width:650px){.app{display:block}.side{width:100%;min-height:auto}.profile{margin-top:20px}.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.module{padding:13px;flex-wrap:wrap}.main{padding:18px}}
+
+/* Campus Formación · sistema visual actualizado */
+:root{--navy:#101d35;--navy-soft:#1b2b49;--primary:#2477e8;--primary-dark:#165fcb;--canvas:#f4f7fb;--line:#e3e9f2;--muted:#718099;--success:#168356;--danger:#c43d3d;--radius:14px;--shadow:0 8px 28px rgba(16,29,53,.055)}
+body{background:var(--canvas);color:#17243b;line-height:1.45;font-size:14px}
+button,input,textarea,select{font-size:inherit}button{transition:background .15s,border-color .15s,transform .15s,box-shadow .15s}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #2477e855;outline-offset:2px}
+.side{width:252px;background:linear-gradient(180deg,#101d35 0%,#0e1a30 100%);padding:24px 15px;box-shadow:3px 0 18px #101d3508}
+.brand{font-size:19px;letter-spacing:-.35px;padding:4px 10px}.brand small{font-size:10px;line-height:1.4}
+.nav{margin-top:34px}.navtitle{letter-spacing:1px;font-size:10px}.navitem{position:relative;display:flex;align-items:center;gap:5px;padding:12px 13px;border-radius:10px;margin:5px 0;color:#c2cede;font-size:13px}.navitem:hover{background:#ffffff12}.navitem.active{background:linear-gradient(100deg,#2477e8,#2068d8);box-shadow:0 6px 16px #2477e833;color:#fff}
+.nav-badge{margin-left:auto;background:#e23c4c;color:white;border-radius:20px;min-width:20px;padding:2px 6px;font-size:10px;font-weight:800;text-align:center}
+.main{padding:32px 38px;max-width:1920px}.top{margin-bottom:24px}.eyebrow{font-weight:800;letter-spacing:1px;font-size:10px;text-transform:uppercase}.title{font-size:30px;line-height:1.15;letter-spacing:-.75px;margin:7px 0}.subtitle{font-size:13px;line-height:1.6;color:#78859a}
+.card,.tablebox{border-color:var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.cards{gap:16px}.stat{padding:20px 21px}.stat span{font-size:12px}.stat b{font-size:30px;letter-spacing:-.7px}
+.sectionhead{padding:19px 21px}.sectiontitle{font-size:15px;letter-spacing:-.2px}.sectionsub{line-height:1.55}.notice{border-radius:11px;padding:15px 18px;line-height:1.6}
+.primary,.go{background:var(--primary)}.primary{border-radius:9px;padding:12px 18px}.primary:hover,.go:hover{background:var(--primary-dark);box-shadow:0 5px 15px #2477e82b}.secondary,.excel{border-radius:9px;padding:10px 14px}.secondary:hover,.excel:hover{border-color:#b9cbe6;background:#f7faff}.danger-button{border-radius:9px}.complete{border-radius:9px;padding:12px 17px}.complete:disabled{background:#dfe5ed;color:#8792a3;cursor:not-allowed;box-shadow:none;opacity:1}
+.table th{font-weight:800;font-size:11px;letter-spacing:.2px;padding:13px 17px}.table td{padding:15px 17px;vertical-align:middle}.table tr:hover td{background:#fafcff}.table{min-width:820px}
+.module{padding:16px 20px;gap:14px}.module:hover:not(.locked){background:#fbfdff}.icon{border-radius:11px;background:#edf3fb}.badge{font-size:10px;letter-spacing:.1px}.open{background:#eaf2ff;color:#1c66c4}.done{background:#e4f7ee;color:#14804e}.lock{background:#eff2f6;color:#7e8a9b}
+.content{padding:24px}.video{height:auto;min-height:240px;aspect-ratio:16/9}.resource-frame{height:auto;min-height:0;aspect-ratio:16/9;background:#0c1422}.resource-video{display:block;max-height:none;aspect-ratio:16/9}
+.content-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:18px;align-items:start}.content-queue{position:sticky;top:18px;overflow:hidden}.playlist-list{padding:6px 10px 12px;max-height:calc(100vh - 230px);overflow:auto}.playlist-item{display:flex;align-items:center;gap:10px;width:100%;border:1px solid transparent;text-align:left;padding:11px 10px;border-radius:10px;background:white;color:#25334b;margin:3px 0}.playlist-item:hover:not(:disabled){background:#f5f9ff}.playlist-item.current{background:#eaf2ff;border-color:#cfe0ff;color:#174c9c}.playlist-item:disabled{opacity:.5;cursor:not-allowed}.playlist-number{display:flex;align-items:center;justify-content:center;min-width:28px;height:28px;border-radius:50%;background:#edf1f7;color:#52627a;font-size:11px;font-weight:800}.playlist-item.current .playlist-number{background:var(--primary);color:white}.playlist-copy{min-width:0;flex:1}.playlist-title{font-size:12px;font-weight:800;display:block}.playlist-sub{font-size:10px;color:#8190a6;display:block;margin-top:3px}.playlist-state{font-size:11px;color:var(--success)}
+.watch-gate{border:1px solid #d7e6fc;background:#f2f7ff;padding:14px 16px;border-radius:11px;margin:17px 0 14px}.watch-gate-head{display:flex;align-items:center;gap:9px;font-size:12px;color:#365c92}.watch-gate-head b{margin-left:auto;color:#246ec5;white-space:nowrap}.watch-track{height:7px;border-radius:12px;background:#dce6f4;overflow:hidden;margin-top:12px}.watch-track-fill{height:100%;width:0;background:linear-gradient(90deg,#2477e8,#22a4d7);transition:width .2s}.completion-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.completion-status{font-size:12px;color:var(--success);font-weight:800;margin-right:auto}.continue-button{border:0;background:#2477e8;color:#fff;border-radius:9px;padding:12px 16px;font-weight:800}.continue-button:hover{background:#165fcb}.external-warning{font-size:12px;line-height:1.55;color:#96651e;background:#fff8e7;padding:12px 14px;border-radius:9px;margin-top:10px}
+.question-card{border:1px solid var(--line);border-radius:12px;background:white;padding:17px 18px;margin:12px 0}.question-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.question-subject{font-weight:800;font-size:13px}.question-message{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.6;color:#47556d;margin:12px 0}.question-meta{font-size:10px;color:#8591a4}.answer-box{margin-top:14px;padding:15px;border-radius:11px;background:#edf5ff;border:1px solid #d7e7fb}.answer-heading{display:flex;align-items:center;gap:8px;font-size:11px;color:#245b9d;font-weight:800}.answer-text{white-space:pre-wrap;font-size:12px;line-height:1.65;color:#243d5f;margin-top:8px}.comment-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;border-bottom:1px solid var(--line)}.filter-pills{display:flex;gap:6px;flex-wrap:wrap}.filter-pill{border:1px solid #e0e6ef;background:#fff;color:#5d6b81;border-radius:8px;padding:8px 11px;font-size:11px;font-weight:800}.filter-pill.active{background:#2477e8;border-color:#2477e8;color:white}.search-input{max-width:320px;min-width:220px}.notification-count{font-weight:800}.notification-modal{position:fixed;inset:0;background:#0e1a30a6;display:flex;align-items:center;justify-content:center;padding:20px;z-index:50;backdrop-filter:blur(4px)}.notification-box{position:relative;width:min(430px,100%);background:white;border-radius:18px;padding:30px 28px 26px;box-shadow:0 25px 80px #07132944;text-align:center}.notification-close{position:absolute;right:13px;top:13px;border:0;background:#f0f3f8;color:#5b6980;width:31px;height:31px;border-radius:8px}.notification-symbol{width:54px;height:54px;margin:0 auto 15px;border-radius:50%;display:grid;place-items:center;background:#e5f7ee;color:#168356;font-size:24px}.notification-symbol.admin{background:#fff0e4;color:#d9781b}.notification-box h2{font-size:20px;letter-spacing:-.3px;margin:0 0 9px}.notification-box p{font-size:13px;color:#748197;line-height:1.65;margin:0 0 20px}.notification-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}.progress-cell{min-width:100px;display:flex;align-items:center;gap:8px}.mini-progress{height:6px;background:#e8edf4;border-radius:8px;overflow:hidden;flex:1;min-width:44px}.mini-progress span{display:block;height:100%;border-radius:8px;background:#2477e8}.comment-excerpt{max-width:230px;white-space:normal;overflow-wrap:anywhere;color:#485870;line-height:1.5}.reply-question-detail{padding:12px 14px;background:#f5f7fb;border-radius:10px;margin:14px 0;color:#4b5b73;font-size:12px;line-height:1.6;white-space:pre-wrap}.reply-byline{font-size:11px;color:#8190a4;margin-top:5px}
+@media(max-width:1120px){.content-layout{grid-template-columns:minmax(0,1fr) 270px}.main{padding:26px}}
+@media(max-width:850px){.content-layout{grid-template-columns:1fr}.content-queue{position:static}.playlist-list{max-height:360px}.side{width:220px}.main{padding:22px}.title{font-size:26px}}
+@media(max-width:650px){.app{display:block}.side{width:100%;min-height:auto}.profile{margin-top:20px}.cards{grid-template-columns:1fr 1fr}.top{align-items:flex-start;flex-direction:column}.module{padding:13px;flex-wrap:wrap}.main{padding:16px}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}.content-row{align-items:flex-start;flex-wrap:wrap}.content-row .mi{min-width:140px}.drop-zone{padding:0 12px}.lane-head{padding:10px 12px}.search-input{max-width:none;width:100%}.tablebox{border-radius:11px}.notification-box{padding:28px 20px 22px}}
+
+</style>
+</head>
+<body>
+
+<div id="login" class="login">
+  <div class="loginbox">
+    <div class="logo">Campus Formación<small>GRUPO ACERCA</small></div>
+    <h1>Acceso a la plataforma</h1>
+    <div class="sub">Selecciona tu perfil para continuar</div>
+    <div class="roles">
+      <button id="rStudent" class="role active" type="button" onclick="setRole('student')">👨‍🎓 Formación</button>
+      <button id="rAdmin" class="role" type="button" onclick="setRole('admin')">👨‍💼 Administrador</button>
+    </div>
+    <div id="err" class="error hidden"></div>
+    <label id="ulabel" for="user">Correo electrónico</label>
+    <input id="user" type="email" autocomplete="username" placeholder="Introduce tu correo">
+    <div id="passWrap">
+      <label for="pass">Contraseña</label>
+      <input id="pass" type="password" autocomplete="current-password" placeholder="Introduce tu contraseña">
+    </div>
+    <button id="loginButton" class="primary" type="button" onclick="login()">Acceder</button>
+    <div class="hint">Acceso seguro · Grupo Acerca<br>Si no tienes contraseña, contacta con el administrador de formación.</div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+  <aside class="side">
+    <div class="brand">Campus Formación<small id="brandRole">FORMACIÓN · GRUPO ACERCA</small></div>
+    <div id="studentNav" class="nav">
+      <div class="navtitle">Mi formación</div>
+      <div class="navitem active" onclick="studentPage('home',this)">⌂ &nbsp; Inicio</div>
+      <div class="navitem" onclick="studentPage('additional',this)">＋ &nbsp; Contenido adicional</div>
+      <div class="navitem" onclick="studentPage('doubts',this)">? &nbsp; Dudas sobre el curso <span id="studentReplyBadge" class="nav-badge hidden">0</span></div>
+    </div>
+    <div id="adminNav" class="nav hidden">
+      <div class="navtitle">Administración</div>
+      <div class="navitem active" onclick="adminPage('summary',this)">▦ &nbsp; Resumen</div>
+      <div class="navitem" onclick="adminPage('courses',this)">▣ &nbsp; Cursos realizados</div>
+      <div class="navitem" onclick="adminPage('comments',this)">▤ &nbsp; Comentarios <span id="commentsNavBadge" class="nav-badge hidden">0</span></div>
+      <div class="navitem" onclick="adminPage('manage',this)">▣ &nbsp; Gestión de contenidos</div>
+    </div>
+    <div class="profile">
+      <div id="avatar" class="avatar">U</div>
+      <div><b id="pname" style="font-size:12px">Usuario</b><small id="pemail"></small></div>
+    </div>
+    <div class="logout" onclick="logout()">↪ &nbsp; Cerrar sesión</div>
+  </aside>
+
+  <main class="main">
+    <div id="studentArea">
+      <section id="s-home">
+        <div class="top"><div><div class="eyebrow">MI FORMACIÓN</div><h1 class="title">Bienvenido</h1><div class="subtitle">Continúa con tu formación desde el punto en el que la dejaste.</div></div></div>
+        <div class="card progress">
+          <div class="phead"><span>Progreso de la formación</span><span id="hp">0%</span></div>
+          <div class="pbar"><div id="hb" class="pfill" style="width:0%"></div></div>
+        </div>
+        <div id="notice" class="notice">Cargando tu progreso...</div>
+        <div class="card">
+          <div class="sectionhead"><div class="sectiontitle">Contenido de la formación</div><div class="sectionsub">Los contenidos se desbloquean en orden.</div></div>
+          <div id="homeModules"></div>
+        </div>
+      </section>
+
+      <section id="s-additional" class="hidden">
+        <div class="top"><div><div class="eyebrow">FORMACIÓN</div><h1 class="title">Contenido adicional</h1><div class="subtitle">Material complementario, disponible sin completar los temas de la formación.</div></div></div>
+        <div class="card"><div class="sectionhead"><div class="sectiontitle">Material complementario</div><div class="sectionsub">Estos contenidos no bloquean ni dependen del progreso de los temas principales.</div></div><div id="additionalModules"></div></div>
+      </section>
+
+      <section id="s-doubts" class="hidden">
+        <div class="top"><div><div class="eyebrow">FORMACIÓN</div><h1 class="title">Dudas sobre el curso</h1><div class="subtitle">Envía una consulta al equipo de formación.</div></div></div>
+        <div class="card content">
+          <label for="subject">Asunto</label><input id="subject" placeholder="Escribe el asunto">
+          <label for="comment">Comentario</label><textarea id="comment" rows="7" placeholder="Escribe aquí tu duda o comentario"></textarea>
+          <button class="primary" style="width:auto;padding:11px 20px" onclick="sendComment()">Enviar comentario</button>
+          <div id="myQuestions" style="margin-top:20px"></div>
+        </div>
+      </section>
+
+      <section id="s-content" class="hidden">
+        <div class="top">
+          <div><div class="eyebrow">FORMACIÓN</div><h1 id="ctitle" class="title">Contenido</h1><div id="csub" class="subtitle"></div></div>
+          <button class="excel" onclick="backFromContent()">← Volver</button>
+        </div>
+        <div class="content-layout">
+          <div id="contentBody"></div>
+          <aside class="card content-queue">
+            <div class="sectionhead"><div class="sectiontitle">Contenido del tema</div><div class="sectionsub">Tu ruta de aprendizaje</div></div>
+            <div id="contentPlaylist" class="playlist-list"></div>
+          </aside>
+        </div>
+      </section>
+    </div>
+
+    <div id="adminArea" class="hidden">
+      <section id="a-summary">
+        <div class="top"><div><div class="eyebrow">ADMINISTRACIÓN</div><h1 class="title">Resumen</h1><div class="subtitle">Seguimiento basado en datos guardados en Supabase.</div></div><button class="excel" onclick="exportCSV()">↓ &nbsp; Descargar CSV</button></div>
+        <div id="adminStats" class="cards"></div>
+        <div class="tablebox">
+          <div class="sectionhead"><div class="sectiontitle">Actividad de formación</div><div class="sectionsub">Progreso real registrado por usuario.</div></div>
+          <table class="table"><thead><tr><th>Usuario</th><th>Progreso</th><th>Contenidos completados</th><th>Estado</th></tr></thead><tbody id="recentBody"></tbody></table>
+        </div>
+      </section>
+
+      <section id="a-courses" class="hidden">
+        <div class="top"><div><div class="eyebrow">ADMINISTRACIÓN</div><h1 class="title">Cursos realizados</h1><div class="subtitle">Seguimiento detallado de los trabajadores.</div></div><button class="excel" onclick="exportCSV()">↓ &nbsp; Descargar CSV</button></div>
+        <div class="tablebox"><table class="table"><thead><tr><th>Usuario</th><th>Progreso</th><th>Contenidos completados</th><th>Estado</th><th>Detalle</th></tr></thead><tbody id="coursesBody"></tbody></table></div>
+      </section>
+
+      <section id="a-comments" class="hidden">
+        <div class="top"><div><div class="eyebrow">ADMINISTRACIÓN</div><h1 class="title">Comentarios</h1><div class="subtitle">Responde las dudas y consultas de los trabajadores.</div></div><button class="excel" onclick="exportCSV()">↓ &nbsp; Descargar CSV</button></div>
+        <div class="card">
+          <div class="comment-toolbar">
+            <div class="filter-pills">
+              <button class="filter-pill active" data-comment-filter="all" onclick="setCommentFilter('all',this)">Todas <span id="commentCountAll"></span></button>
+              <button class="filter-pill" data-comment-filter="pending" onclick="setCommentFilter('pending',this)">Pendientes <span id="commentCountPending"></span></button>
+              <button class="filter-pill" data-comment-filter="answered" onclick="setCommentFilter('answered',this)">Respondidas <span id="commentCountAnswered"></span></button>
+            </div>
+            <input id="commentSearch" class="search-input" type="search" placeholder="Buscar correo, asunto o consulta…" oninput="renderCommentsTable()" aria-label="Buscar consultas">
+          </div>
+          <div class="tablebox" style="border:0;box-shadow:none;border-radius:0"><table class="table"><thead><tr><th>Correo electrónico</th><th>Asunto</th><th>Consulta</th><th>Fecha</th><th>Estado</th><th>Respuesta</th><th>Acciones</th></tr></thead><tbody id="commentsBody"></tbody></table></div>
+        </div>
+      </section>
+
+
+      <section id="a-manage" class="hidden">
+        <div class="top"><div><div class="eyebrow">ADMINISTRACIÓN</div><h1 class="title">Gestión de contenidos</h1><div class="subtitle">Crea temas y añade contenidos que aparecerán a los estudiantes al publicarlos.</div></div><button class="primary" style="width:auto;margin:0;padding:11px 16px" onclick="showTopicForm()">＋ Crear tema</button></div>
+        <div class="notice">Organización: <b>Curso → Tema → Contenidos</b>. Elige si cada contenido aparece en Formación (con orden y desbloqueos por tema) o en Contenido adicional (acceso libre). Arrastra para reordenar o usa las flechas.</div>
+        <div id="managerMessage" class="hidden"></div>
+        <div id="topicFormCard" class="card content hidden" style="margin-bottom:18px">
+          <div class="manage-toolbar"><div><div class="sectiontitle" id="topicFormHeading">Crear tema</div><div class="sectionsub">Los temas nuevos se guardan como borrador hasta que los publiques.</div></div><button class="close" type="button" onclick="cancelTopicForm()">×</button></div>
+          <form id="topicForm" onsubmit="saveTopic(event)">
+            <div class="formgrid">
+              <div class="wide"><label for="topicTitle">Nombre del tema *</label><input id="topicTitle" required maxlength="180" placeholder="Ej. 1. Conceptos básicos" /></div>
+              <div class="wide"><label for="topicDescription">Descripción</label><textarea id="topicDescription" rows="3" placeholder="Explica brevemente qué aprenderá el estudiante"></textarea></div>
+              <div><label for="topicPosition">Orden</label><input id="topicPosition" type="number" min="0" step="1" value="1" required /></div>
+            </div>
+            <label class="checkrow"><input id="topicActive" type="checkbox" /> Publicar tema para los estudiantes al guardar</label>
+            <div class="form-actions" style="margin-top:18px"><button class="primary" style="width:auto;margin:0" type="submit">Guardar tema</button><button class="secondary" type="button" onclick="cancelTopicForm()">Cancelar</button></div>
+          </form>
+        </div>
+        <div id="contentFormCard" class="card content hidden" style="margin-bottom:18px">
+          <div class="manage-toolbar"><div><div class="sectiontitle" id="contentFormHeading">Añadir contenido</div><div class="sectionsub">Elige dónde aparecerá este contenido. Puedes asignarlo a un tema y pegar un enlace https:// al recurso.</div></div><button class="close" type="button" onclick="cancelContentForm()">×</button></div>
+          <form id="contentForm" onsubmit="saveContent(event)">
+            <div class="formgrid">
+              <div class="wide"><label for="contentTitle">Título del contenido *</label><input id="contentTitle" required maxlength="180" placeholder="Ej. Vídeo: funcionamiento del mercado" /></div>
+              <div><label for="contentTopic">Tema (opcional)</label><select id="contentTopic"><option value="">Sin tema asignado</option></select></div>
+              <div><label for="contentArea">Mostrar en el perfil del estudiante *</label><select id="contentArea" required><option value="training">Formación (sigue el orden del tema)</option><option value="additional">Contenido adicional (acceso libre)</option></select></div>
+              <div><label for="contentType">Tipo de contenido *</label><select id="contentType" required><option value="video">Vídeo</option><option value="presentation">PowerPoint / presentación</option><option value="document">PDF / documento</option><option value="test">Test externo (enlace)</option></select></div>
+              <div class="wide"><label for="contentUrl">Enlace al contenido *</label><input id="contentUrl" type="url" required placeholder="https://..." /></div>
+              <div><label for="contentPosition">Orden</label><input id="contentPosition" type="number" min="0" step="1" value="1" required /></div>
+            </div>
+            <label class="checkrow"><input id="contentActive" type="checkbox" /> Publicar este contenido para los estudiantes</label>
+            <div class="form-actions" style="margin-top:18px"><button class="primary" style="width:auto;margin:0" type="submit">Guardar contenido</button><button class="secondary" type="button" onclick="cancelContentForm()">Cancelar</button></div>
+          </form>
+        </div>
+        <div id="topicsAdminList"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modalbox">
+    <div class="modalhead"><div><div class="eyebrow">FICHA DEL TRABAJADOR</div><h2 id="muser" style="margin:4px 0 0;font-size:20px"></h2></div><button class="close" onclick="closeModal()">×</button></div>
+    <div id="mstats" class="detail"></div><h3 style="font-size:14px">Contenidos completados</h3><div id="mdone"></div>
+  </div>
+</div>
+
+
+<div id="replyModal" class="modal hidden" onclick="if(event.target===this)closeReplyModal()">
+  <div class="modalbox">
+    <div class="modalhead"><div><div class="eyebrow">CONSULTA DEL TRABAJADOR</div><h2 style="font-size:21px;margin:5px 0">Responder consulta</h2><div id="replyUserEmail" class="reply-byline"></div></div><button class="close" type="button" onclick="closeReplyModal()">×</button></div>
+    <div id="replyQuestionSummary" class="reply-question-detail"></div>
+    <form id="replyForm" onsubmit="saveReply(event)">
+      <label for="replyText">Respuesta del equipo de formación *</label>
+      <textarea id="replyText" rows="6" required maxlength="10000" placeholder="Escribe una respuesta clara para el trabajador…"></textarea>
+      <div class="form-actions" style="margin-top:17px"><button class="primary" style="width:auto;margin:0" type="submit">Enviar respuesta</button><button class="secondary" type="button" onclick="closeReplyModal()">Cancelar</button></div>
+    </form>
+  </div>
+</div>
+
+<div id="notificationModal" class="notification-modal hidden" role="dialog" aria-modal="true" aria-labelledby="notificationTitle">
+  <div class="notification-box">
+    <button class="notification-close" type="button" aria-label="Cerrar" onclick="closeNotification()">×</button>
+    <div id="notificationSymbol" class="notification-symbol">✓</div>
+    <h2 id="notificationTitle">Tienes una notificación</h2>
+    <p id="notificationMessage"></p>
+    <div class="notification-actions"><button id="notificationAction" class="primary" style="width:auto;margin:0" type="button" onclick="runNotificationAction()">Ver</button><button class="secondary" type="button" onclick="closeNotification()">Cerrar</button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Sustituye los dos valores por los de tu proyecto Supabase.
+const SUPABASE_URL = "https://fvxwwtijhyhlefupuqzh.supabase.co";
+const SUPABASE_KEY = "sb_publishable_U8_dCmCYLkhlpYZiwwrMMQ_sbT_6fjn";
+
+const supabaseClient = window.supabase &&
+  !SUPABASE_URL.includes("PEGA_AQUI") &&
+  !SUPABASE_KEY.includes("PEGA_AQUI")
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+  : null;
+
+let role="student", user=null, profile=null, current=0, done=[], contents=[], questions=[], topics=[];
+let adminTopics=[], adminContents=[], editingTopicId=null, editingContentId=null;
+let adminDirectory=[], adminQuestions=[], commentFilter="all", replyingQuestionId=null;
+let notificationAction=null, notificationTimer=null, announcedAdminQuestions=new Set(), announcedStudentReplies=new Set();
+let videoPlayer=null, videoTrackingTimer=null, videoProvider=null, videoMaxWatched=0, videoDuration=0, videoEnded=false, videoTrackable=false, videoCurrentKey=null;
+const fallbackMods=[
+  ["intro","video","Video inicial","Presentación de la formación"],
+  ["dist","video","¿De qué se encarga la distribuidora?","1. Profundizando en los Conceptos básicos · Vídeo"],
+  ["reg","video","Mercado regulado","1. Profundizando en los Conceptos básicos · Vídeo"],
+  ["libre","video","Mercado libre","1. Profundizando en los Conceptos básicos · Vídeo"],
+  ["peajes","video","¿Qué son los peajes de acceso y cómo gestionarlos?","1. Profundizando en los Conceptos básicos · Vídeo"],
+  ["test1","test","Formulario tipo test · Conceptos básicos","1. Profundizando en los Conceptos básicos · Test"],
+  ["ppt1","ppt","Resumen · Conceptos básicos","1. Profundizando en los Conceptos básicos · PPT"],
+  ["fact1","video","Partes de una factura","2. Facturas · Vídeo"],
+  ["fact2","video","Partes de una factura que nunca se tienen en cuenta","2. Facturas · Vídeo"],
+  ["power","video","Todo sobre la potencia","2. Facturas · Vídeo"],
+  ["calc","video","Cómo calcular una factura","2. Facturas · Vídeo"],
+  ["costs","video","Costes adicionales que se puede encontrar el cliente","2. Facturas · Vídeo · Coste de alta y cambios de potencia"],
+  ["test2","test","Formulario tipo test · Facturas","2. Facturas · Test"],
+  ["ppt2","ppt","Resumen · Facturas","2. Facturas · PPT"]
+];
+const typeMap={video:"video",test:"test",presentation:"ppt",ppt:"ppt",document:"document",pdf:"document",text:"text"};
+let mods=fallbackMods;
+
+function setRole(r){
+  role=r;
+  document.getElementById("rStudent").classList.toggle("active",r==="student");
+  document.getElementById("rAdmin").classList.toggle("active",r==="admin");
+  document.getElementById("ulabel").textContent="Correo electrónico";
+  document.getElementById("user").type="email";
+  document.getElementById("user").placeholder="Introduce tu correo";
+  document.getElementById("passWrap").classList.remove("hidden");
+  document.getElementById("user").value="";
+  document.getElementById("pass").value="";
+  hideError();
+}
+function showError(message){
+  const e=document.getElementById("err");
+  e.textContent=message;
+  e.classList.remove("hidden");
+}
+function hideError(){document.getElementById("err").classList.add("hidden")}
+function escapeHtml(s){
+  return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+function formatDate(v){
+  return v?new Date(v).toLocaleString("es-ES",{dateStyle:"short",timeStyle:"short"}):"—";
+}
+function typeLabel(t){return typeMap[t]||"video"}
+function normalizeContent(row){
+  const topic=topics.find(t=>String(t.id)===String(row.topic_id));
+  const kind=typeLabel(row.content_type);
+  const kindLabel=kind==="test"?"Test":kind==="ppt"?"Presentación":kind==="document"?"Documento PDF":kind==="text"?"Texto":"Vídeo";
+  const area=row.display_area||"training";
+  const areaLabel=area==="additional"?"Contenido adicional":(topic?topic.title:"Formación");
+  return [row.slug||("contenido-"+row.id),kind,row.title,areaLabel+" · "+kindLabel,row.id,row.topic_id,row.url,row.content_type,area];
+}
+function safeHttpUrl(value){
+  try{const u=new URL(String(value||""));return ["http:","https:"].includes(u.protocol)?u.href:null}catch(_){return null}
+}
+function slugify(value){
+  return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,70)||"contenido";
+}
+function contentTypeLabel(t){return ({video:"Vídeo",presentation:"PowerPoint / presentación",ppt:"PowerPoint / presentación",document:"PDF / documento",pdf:"PDF / documento",test:"Test externo",text:"Texto"})[t]||t||"Contenido";}
+
+
+function contentForMod(mod){
+  if(!mod)return null;
+  return contents.find(c=>String(c.id)===String(mod[4])||c.slug===mod[0])||null;
+}
+function questionUnreadForStudent(q){return !!(q.admin_reply&&q.answered_at&&!q.student_reply_read_at)}
+function setBadge(id,count){
+  const el=document.getElementById(id);if(!el)return;
+  el.textContent=String(count);el.classList.toggle("hidden",!count);
+}
+function showNotification({type="student",title,message,buttonText="Ver",action=null}){
+  const modal=document.getElementById("notificationModal");if(!modal)return;
+  document.getElementById("notificationTitle").textContent=title;
+  document.getElementById("notificationMessage").textContent=message;
+  document.getElementById("notificationAction").textContent=buttonText;
+  const symbol=document.getElementById("notificationSymbol");
+  symbol.classList.toggle("admin",type==="admin");symbol.textContent=type==="admin"?"!":"✓";
+  notificationAction=action;modal.classList.remove("hidden");
+}
+function closeNotification(){document.getElementById("notificationModal")?.classList.add("hidden");notificationAction=null;}
+function runNotificationAction(){const action=notificationAction;closeNotification();if(typeof action==="function")action();}
+function updateStudentReplyBadge(){setBadge("studentReplyBadge",questions.filter(questionUnreadForStudent).length)}
+function updateAdminQuestionBadge(){setBadge("commentsNavBadge",adminQuestions.filter(q=>!q.admin_seen_at).length)}
+async function markStudentRepliesRead(){
+  const unread=questions.filter(questionUnreadForStudent);
+  if(!unread.length)return;
+  const ids=unread.map(q=>q.id);
+  const {error}=await supabaseClient.from("course_questions").update({student_reply_read_at:new Date().toISOString()}).in("id",ids).eq("user_id",user.id);
+  if(error){console.error("No se pudieron marcar las respuestas como leídas:",error);return;}
+  await loadQuestions();
+}
+async function markAdminQuestionsSeen(){
+  const unread=adminQuestions.filter(q=>!q.admin_seen_at);
+  if(!unread.length)return;
+  const ids=unread.map(q=>q.id);
+  const {error}=await supabaseClient.from("course_questions").update({admin_seen_at:new Date().toISOString()}).in("id",ids);
+  if(error){console.error("No se pudieron marcar las consultas como vistas:",error);return;}
+  await renderAdmin();
+}
+async function notifyStudentReplies(initial=false){
+  updateStudentReplyBadge();
+  const unread=questions.filter(questionUnreadForStudent);
+  const newOnes=unread.filter(q=>!announcedStudentReplies.has(String(q.id)+":"+String(q.answered_at||"")));
+  if(!newOnes.length)return;
+  newOnes.forEach(q=>announcedStudentReplies.add(String(q.id)+":"+String(q.answered_at||"")));
+  const count=initial?unread.length:newOnes.length;
+  if(count>0){
+    showNotification({type:"student",title:count===1?"Tienes una nueva respuesta":"Tienes nuevas respuestas",message:`El equipo de formación ha respondido ${count===1?"a una de tus consultas":"a "+count+" de tus consultas"}. Puedes leer ${count===1?"la respuesta":"las respuestas"} en «Dudas sobre el curso».`,buttonText:"Ver mis consultas",action:()=>studentPage("doubts",document.querySelectorAll("#studentNav .navitem")[2])});
+  }
+}
+async function checkAdminNotifications(initial=false){
+  if(!profile||profile.role!=="admin")return;
+  const {data,error}=await supabaseClient.from("course_questions").select("id,subject,created_at,admin_seen_at").is("admin_seen_at",null).order("created_at",{ascending:false});
+  if(error){console.error("No se pudieron comprobar notificaciones de consultas:",error);return;}
+  const unseen=data||[];setBadge("commentsNavBadge",unseen.length);
+  const newOnes=unseen.filter(q=>!announcedAdminQuestions.has(String(q.id)+":"+String(q.created_at||"")));
+  if(!newOnes.length)return;
+  newOnes.forEach(q=>announcedAdminQuestions.add(String(q.id)+":"+String(q.created_at||"")));
+  const count=initial?unseen.length:newOnes.length;
+  if(count>0){
+    showNotification({type:"admin",title:count===1?"Tienes una nueva consulta":"Tienes nuevas consultas",message:`Hay ${count} ${count===1?"consulta pendiente de revisar":"consultas pendientes de revisar"}. Puedes leerlas y responderlas en «Comentarios».`,buttonText:"Ver consultas",action:()=>adminPage("comments",document.querySelectorAll("#adminNav .navitem")[2])});
+  }
+}
+function startNotificationPolling(){
+  if(notificationTimer)clearInterval(notificationTimer);
+  notificationTimer=setInterval(async()=>{
+    if(!user||!profile)return;
+    if(profile.role==="admin")await checkAdminNotifications(false);
+    else{
+      try{await loadQuestions();await notifyStudentReplies(false);}catch(e){console.error("No se pudieron comprobar las respuestas:",e)}
+    }
+  },30000);
+}
+function parseYouTubeId(raw){
+  try{
+    const u=new URL(raw);const host=u.hostname.replace(/^www\./,"").toLowerCase();
+    if(host==="youtu.be")return u.pathname.split("/").filter(Boolean)[0]||null;
+    if(["youtube.com","m.youtube.com","youtube-nocookie.com","www.youtube-nocookie.com"].includes(host)){
+      if(u.searchParams.get("v"))return u.searchParams.get("v");
+      const match=u.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]+)/);if(match)return match[1];
+    }
+  }catch(_){}
+  return null;
+}
+function parseVimeoId(raw){try{const u=new URL(raw);if(/(^|\.)vimeo\.com$/i.test(u.hostname)){const m=u.pathname.match(/\/(?:video\/)?(\d+)/);if(m)return m[1]}}catch(_){}return null;}
+function stopVideoTracking(){
+  if(videoTrackingTimer){clearInterval(videoTrackingTimer);videoTrackingTimer=null;}
+  const directVideo=document.getElementById("direct-video");if(directVideo){try{directVideo.pause()}catch(_){}}
+  if(videoPlayer&&typeof videoPlayer.destroy==="function"){try{const result=videoPlayer.destroy();if(result&&typeof result.catch==="function")result.catch(()=>{})}catch(_){}}
+  videoPlayer=null;videoProvider=null;videoTrackable=false;videoMaxWatched=0;videoDuration=0;videoEnded=false;videoCurrentKey=null;
+}
+function updateVideoGateUI(){
+  const fill=document.getElementById("videoWatchFill");const pct=document.getElementById("videoWatchPercent");const note=document.getElementById("videoGateMessage");const mark=document.getElementById("markCompleteBtn");const continueWrap=document.getElementById("continueContentWrap");
+  if(fill)fill.style.width=(videoDuration>0?Math.min(100,Math.round(videoMaxWatched/videoDuration*100)):0)+"%";
+  if(pct)pct.textContent=(videoDuration>0?Math.min(100,Math.round(videoMaxWatched/videoDuration*100)):0)+"%";
+  const alreadyDone=completed(mods[current]?.[0]);
+  if(note){
+    if(alreadyDone)note.textContent="Vídeo completado. Puedes continuar cuando quieras.";
+    else if(videoEnded)note.textContent="¡Has visto el vídeo completo! Ya puedes marcarlo como completado.";
+    else if(!videoTrackable)note.textContent="Este enlace no permite verificar automáticamente que has visto el vídeo completo.";
+    else note.textContent="Debes reproducir el vídeo hasta el final para poder marcarlo como completado.";
+  }
+  if(mark){mark.disabled=!videoEnded||alreadyDone;mark.classList.toggle("hidden",alreadyDone);}
+  if(continueWrap)continueWrap.classList.toggle("hidden",!alreadyDone);
+}
+function markVideoEnded(){
+  if(!videoTrackable||videoCurrentKey!==String(mods[current]?.[0]))return;
+  videoEnded=true;videoMaxWatched=Math.max(videoMaxWatched,videoDuration||0);updateVideoGateUI();
+}
+function loadYouTubeApi(){
+  if(window.YT&&window.YT.Player)return Promise.resolve(window.YT);
+  if(window.__campusYtPromise)return window.__campusYtPromise;
+  window.__campusYtPromise=new Promise((resolve,reject)=>{
+    const previous=window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady=function(){try{if(typeof previous==="function")previous()}catch(_){}resolve(window.YT)};
+    if(!document.querySelector('script[data-campus-youtube-api]')){
+      const script=document.createElement("script");script.src="https://www.youtube.com/iframe_api";script.async=true;script.dataset.campusYoutubeApi="1";script.onerror=()=>reject(new Error("No se pudo cargar el reproductor de YouTube."));document.head.appendChild(script);
+    }
+  });
+  return window.__campusYtPromise;
+}
+async function startYouTubeTracking(){
+  try{
+    await loadYouTubeApi();if(videoCurrentKey!==String(mods[current]?.[0]))return;
+    const frame=document.getElementById("youtube-player");if(!frame)return;
+    videoPlayer=new window.YT.Player(frame,{events:{
+      onReady:event=>{if(videoCurrentKey!==String(mods[current]?.[0]))return;videoTrackable=true;videoProvider="youtube";videoPlayer=event.target;videoDuration=Number(videoPlayer.getDuration())||0;updateVideoGateUI();},
+      onStateChange:event=>{
+        if(videoCurrentKey!==String(mods[current]?.[0]))return;
+        if(event.data===window.YT.PlayerState.PLAYING){
+          if(videoTrackingTimer)clearInterval(videoTrackingTimer);
+          let lastWall=Date.now();
+          videoTrackingTimer=setInterval(()=>{
+            if(!videoPlayer||videoProvider!=="youtube"||videoCurrentKey!==String(mods[current]?.[0]))return;
+            try{
+              const state=videoPlayer.getPlayerState();const now=Date.now();const elapsed=Math.max(.5,(now-lastWall)/1000);lastWall=now;
+              if(state!==window.YT.PlayerState.PLAYING)return;
+              const time=Number(videoPlayer.getCurrentTime())||0;videoDuration=Number(videoPlayer.getDuration())||videoDuration;
+              const allowedJump=Math.max(2.8,elapsed*2+1.2);
+              if(time>videoMaxWatched+allowedJump && videoMaxWatched<videoDuration-2.5){videoPlayer.seekTo(Math.max(0,videoMaxWatched),true);return;}
+              videoMaxWatched=Math.max(videoMaxWatched,time);updateVideoGateUI();
+            }catch(e){console.debug("Seguimiento del vídeo:",e)}
+          },600);
+        }else if(event.data===window.YT.PlayerState.ENDED){
+          videoDuration=Number(videoPlayer?.getDuration())||videoDuration;
+          if(videoDuration>0&&videoMaxWatched>=videoDuration-3)markVideoEnded();
+          else{try{videoPlayer.seekTo(Math.max(0,videoMaxWatched),true);videoPlayer.playVideo()}catch(_){} }
+        }else if(videoTrackingTimer){clearInterval(videoTrackingTimer);videoTrackingTimer=null;}
+      }
+    }});
+  }catch(e){console.error(e);const n=document.getElementById("videoGateMessage");if(n)n.textContent="No se ha podido iniciar el seguimiento del vídeo. Comprueba la conexión y recarga la página.";}
+}
+function loadVimeoApi(){
+  if(window.Vimeo&&window.Vimeo.Player)return Promise.resolve(window.Vimeo);
+  if(window.__campusVimeoPromise)return window.__campusVimeoPromise;
+  window.__campusVimeoPromise=new Promise((resolve,reject)=>{
+    const s=document.createElement("script");s.src="https://player.vimeo.com/api/player.js";s.async=true;s.dataset.campusVimeoApi="1";s.onload=()=>resolve(window.Vimeo);s.onerror=()=>reject(new Error("No se pudo cargar el reproductor de Vimeo."));document.head.appendChild(s);
+  });
+  return window.__campusVimeoPromise;
+}
+async function startVimeoTracking(vimeoId){
+  try{
+    await loadVimeoApi();
+    if(!window.Vimeo||!window.Vimeo.Player)return;
+    const frame=document.getElementById("vimeo-player");if(!frame||videoCurrentKey!==String(mods[current]?.[0]))return;
+    videoPlayer=new window.Vimeo.Player(frame);videoProvider="vimeo";videoTrackable=true;
+    videoPlayer.on("loaded",async()=>{try{videoDuration=await videoPlayer.getDuration();updateVideoGateUI()}catch(_){}});
+    videoPlayer.on("timeupdate",data=>{
+      if(videoCurrentKey!==String(mods[current]?.[0]))return;
+      const time=Number(data.seconds)||0;videoDuration=Number(data.duration)||videoDuration;
+      if(time>videoMaxWatched+3.2&&videoMaxWatched<videoDuration-3){videoPlayer.setCurrentTime(videoMaxWatched).catch(()=>{});return;}
+      videoMaxWatched=Math.max(videoMaxWatched,time);updateVideoGateUI();
+    });
+    videoPlayer.on("seeked",async data=>{const t=Number(data.seconds)||0;if(t>videoMaxWatched+3){try{await videoPlayer.setCurrentTime(videoMaxWatched)}catch(_){}}});
+    videoPlayer.on("ended",()=>{if(videoDuration>0&&videoMaxWatched>=videoDuration-3)markVideoEnded();else videoPlayer.setCurrentTime(videoMaxWatched).catch(()=>{})});
+    updateVideoGateUI();
+  }catch(e){console.error(e);const n=document.getElementById("videoGateMessage");if(n)n.textContent="No se ha podido iniciar el seguimiento de Vimeo.";}
+}
+function initDirectVideoTracking(){
+  const el=document.getElementById("direct-video");if(!el)return;
+  videoProvider="direct";videoTrackable=true;
+  el.addEventListener("loadedmetadata",()=>{videoDuration=Number(el.duration)||0;updateVideoGateUI()});
+  el.addEventListener("timeupdate",()=>{
+    const t=Number(el.currentTime)||0;videoDuration=Number(el.duration)||videoDuration;
+    if(t>videoMaxWatched+2.8&&videoMaxWatched<videoDuration-2.8){try{el.currentTime=videoMaxWatched}catch(_){}return;}
+    videoMaxWatched=Math.max(videoMaxWatched,t);updateVideoGateUI();
+  });
+  el.addEventListener("seeking",()=>{const t=Number(el.currentTime)||0;if(t>videoMaxWatched+2.8&&videoMaxWatched<videoDuration-2.8){try{el.currentTime=videoMaxWatched}catch(_){}}});
+  el.addEventListener("ended",()=>{if(videoDuration>0&&videoMaxWatched>=videoDuration-2.8)markVideoEnded()});
+  updateVideoGateUI();
+}
+
+async function login(){
+  hideError();
+  if(!supabaseClient){
+    showError("Falta configurar la URL y la clave pública de Supabase en index.html.");
+    return;
+  }
+  const email=document.getElementById("user").value.trim().toLowerCase();
+  const password=document.getElementById("pass").value;
+  if(!email||!password){showError("Introduce tu correo y contraseña.");return}
+  const btn=document.getElementById("loginButton");
+  btn.disabled=true;btn.textContent="Accediendo...";
+  try{
+    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    user=data.user;
+    const {data:prof,error:profileError}=await supabaseClient
+      .from("profiles").select("id,full_name,role").eq("id",user.id).single();
+    if(profileError)throw profileError;
+    profile=prof;
+    if((role==="admin"&&profile.role!=="admin")||(role==="student"&&profile.role==="admin")){
+      await supabaseClient.auth.signOut();
+      user=null;profile=null;
+      throw new Error(role==="admin"
+        ?"Esta cuenta no tiene permisos de administrador."
+        :"Selecciona Administrador para acceder con esta cuenta.");
+    }
+    await loadTopics();
+    await loadContents();
+    await loadProgress();
+    await loadQuestions();
+    await showApp();
+  }catch(e){
+    console.error(e);
+    showError(messageForAuthError(e));
+  }finally{
+    btn.disabled=false;btn.textContent="Acceder";
+  }
+}
+function messageForAuthError(e){
+  const m=String(e?.message||"");
+  if(m.toLowerCase().includes("invalid login credentials"))return "Correo o contraseña incorrectos.";
+  if(m.toLowerCase().includes("email not confirmed"))return "Tu correo todavía no está confirmado. Contacta con el administrador.";
+  if(m.toLowerCase().includes("permission denied")||m.toLowerCase().includes("row-level security"))return "Supabase ha bloqueado el acceso por permisos. Revisa las políticas RLS.";
+  return m||"No se ha podido iniciar sesión.";
+}
+async function loadTopics(){
+  let query=supabaseClient.from("course_topics").select("id,title,description,position,is_active,created_at").order("position");
+  if(profile?.role!=="admin")query=query.eq("is_active",true);
+  const {data,error}=await query;
+  if(error)throw error;
+  topics=data||[];
+}
+async function loadContents(){
+  let query=supabaseClient.from("course_contents")
+    .select("id,slug,title,content_type,url,position,is_active,topic_id,display_area")
+    .order("position");
+  if(profile?.role!=="admin")query=query.eq("is_active",true);
+  const {data,error}=await query;
+  if(error)throw error;
+  contents=data||[];
+  if(contents.length)mods=contents.map(normalizeContent);
+  else mods=profile?.role==="admin"?fallbackMods:[];
+}
+async function loadProgress(){
+  done=[];
+  if(!user||!contents.length){render();return}
+  const {data,error}=await supabaseClient.from("progress")
+    .select("content_id,completed").eq("user_id",user.id).eq("completed",true);
+  if(error)throw error;
+  const ids=new Set((data||[]).map(x=>x.content_id));
+  done=contents.filter(c=>ids.has(c.id)).map(c=>c.slug);
+  render();
+}
+async function loadQuestions(){
+  if(!user)return;
+  const {data,error}=await supabaseClient.from("course_questions")
+    .select("id,subject,message,status,admin_reply,created_at,answered_at,student_reply_read_at")
+    .eq("user_id",user.id).order("created_at",{ascending:false});
+  if(error)throw error;
+  questions=data||[];
+  renderMyQuestions();
+  updateStudentReplyBadge();
+}
+async function showApp(){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  const isAdmin=profile.role==="admin";
+  document.getElementById("studentArea").classList.toggle("hidden",isAdmin);
+  document.getElementById("adminArea").classList.toggle("hidden",!isAdmin);
+  document.getElementById("studentNav").classList.toggle("hidden",isAdmin);
+  document.getElementById("adminNav").classList.toggle("hidden",!isAdmin);
+  document.getElementById("brandRole").textContent=isAdmin?"ADMINISTRACIÓN · GRUPO ACERCA":"FORMACIÓN · GRUPO ACERCA";
+  document.getElementById("pname").textContent=profile.full_name||user.email.split("@")[0];
+  document.getElementById("pemail").textContent=user.email;
+  document.getElementById("avatar").textContent=(profile.full_name||user.email).slice(0,2).toUpperCase();
+  if(isAdmin){
+    await adminPage("summary",document.querySelector("#adminNav .navitem"));
+    await checkAdminNotifications(true);
+  }else{
+    render();
+    await studentPage("home",document.querySelector("#studentNav .navitem"));
+    await notifyStudentReplies(true);
+  }
+  startNotificationPolling();
+}
+async function logout(){
+  if(notificationTimer){clearInterval(notificationTimer);notificationTimer=null;}
+  stopVideoTracking();closeNotification();closeReplyModal();
+  if(supabaseClient)await supabaseClient.auth.signOut();
+  user=null;profile=null;done=[];questions=[];topics=[];adminTopics=[];adminContents=[];adminQuestions=[];adminDirectory=[];
+  announcedStudentReplies=new Set();announcedAdminQuestions=new Set();
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("user").value="";document.getElementById("pass").value="";setRole("student");
+}
+function unlocked(i){
+  const item=mods[i];
+  if(!item)return false;
+  // El contenido adicional siempre está disponible y no bloquea formación.
+  if(item[8]==="additional")return true;
+  const topicKey=item[5]==null||item[5]===""?"__unassigned__":String(item[5]);
+  const siblings=mods.map((m,index)=>({m,index})).filter(x=>{
+    const key=x.m[5]==null||x.m[5]===""?"__unassigned__":String(x.m[5]);
+    return key===topicKey&&x.m[8]!=="additional";
+  });
+  const pos=siblings.findIndex(x=>x.index===i);
+  return pos<=0||done.includes(siblings[pos-1].m[0]);
+}
+function completed(id){return done.includes(id)}
+function publishedTrainingContents(){
+  const topicMap=new Map(topics.map(t=>[String(t.id),t]));
+  return contents.filter(c=>{
+    if(!c.is_active||(c.display_area||"training")==="additional")return false;
+    if(c.topic_id==null)return true;
+    return topicMap.get(String(c.topic_id))?.is_active===true;
+  });
+}
+function pct(){
+  const training=mods.filter(m=>(m[8]||"training")==="training");
+  if(!training.length)return 0;
+  return Math.round(training.filter(m=>done.includes(m[0])).length/training.length*100);
+}
+function render(){
+  const training=mods.map((m,i)=>({m,i})).filter(x=>(x.m[8]||"training")==="training");
+  const additional=mods.map((m,i)=>({m,i})).filter(x=>(x.m[8]||"training")==="additional");
+  const p=pct();
+  document.getElementById("hp").textContent=p+"%";
+  document.getElementById("hb").style.width=p+"%";
+  list("homeModules","training");list("additionalModules","additional");
+  const available=training.filter(x=>unlocked(x.i)&&!completed(x.m[0]));
+  document.getElementById("notice").innerHTML=training.length&&p===100
+    ?"<b>Formación completada.</b> Has terminado todos los contenidos principales disponibles."
+    :available.length?"Tienes <b>"+available.length+"</b> contenido(s) de formación disponible(s). El contenido adicional está disponible sin desbloqueos."
+    :training.length?"No hay más contenidos de formación disponibles ahora mismo.":"Todavía no hay contenidos de formación publicados.";
+  updateStudentReplyBadge();
+  if(document.getElementById("s-additional")&&!document.getElementById("s-additional").classList.contains("hidden")&&!additional.length){
+    const box=document.getElementById("additionalModules");if(box)box.innerHTML='<div class="empty">No hay contenido adicional publicado todavía.</div>';
+  }
+}
+function list(id,area="training"){
+  const box=document.getElementById(id);if(!box)return;
+  const scoped=mods.map((m,i)=>({m,i})).filter(x=>(x.m[8]||"training")===area);
+  if(!scoped.length){box.innerHTML='<div class="empty">'+(area==="additional"?"No hay contenido adicional publicado todavía.":"Todavía no hay contenidos de formación publicados.")+"</div>";return;}
+  const renderItem=({m,i})=>{
+    const u=area==="additional"?true:unlocked(i),d=completed(m[0]);
+    return `<div class="module ${u?"":"locked"}"><div class="icon">${d?"✓":m[1]==="video"?"▶":m[1]==="test"?"✓":"▤"}</div><div class="mi"><div class="mt">${escapeHtml(m[2])}</div><div class="mm">${escapeHtml(m[3])}</div></div><span class="badge ${d?"done":u?"open":"lock"}">${d?"Completado":u?"Disponible":"Bloqueado"}</span><button class="go" ${u?"":"disabled"} onclick="openContent(${i})">${d?"Revisar":"Acceder"}</button></div>`;
+  };
+  const grouped=topics.filter(t=>t.is_active).map(t=>({t,items:scoped.filter(x=>String(x.m[5]??"")===String(t.id))})).filter(g=>g.items.length);
+  const assigned=new Set(grouped.flatMap(g=>g.items.map(x=>x.i)));
+  let out=grouped.map(g=>`<div class="sectionhead"><div class="sectiontitle">${escapeHtml(g.t.title)}</div>${g.t.description?`<div class="sectionsub">${escapeHtml(g.t.description)}</div>`:""}</div>${g.items.map(renderItem).join("")}`).join("");
+  const other=scoped.filter(x=>!assigned.has(x.i));
+  if(other.length)out+=(grouped.length?'<div class="sectionhead"><div class="sectiontitle">Otros contenidos</div><div class="sectionsub">Material no asignado a un tema publicado.</div></div>':"")+other.map(renderItem).join("");
+  box.innerHTML=out;
+}
+async function studentPage(page,el){
+  if(page!=="content")stopVideoTracking();
+  document.querySelectorAll("#studentArea>section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById("s-"+page).classList.remove("hidden");
+  document.querySelectorAll("#studentNav .navitem").forEach(x=>x.classList.remove("active"));
+  if(el)el.classList.add("active");
+  render();
+  if(page==="doubts"){
+    renderMyQuestions();
+    await markStudentRepliesRead();
+  }
+}
+function backFromContent(){
+  const isAdditional=mods[current]?.[8]==="additional";
+  const nav=document.querySelectorAll("#studentNav .navitem");
+  studentPage(isAdditional?"additional":"home",nav[isAdditional?1:0]);
+}
+function renderContentPlaylist(){
+  const box=document.getElementById("contentPlaylist");if(!box)return;
+  const item=mods[current];if(!item){box.innerHTML='<div class="empty">No hay contenidos en esta ruta.</div>';return;}
+  const area=item[8]||"training",topicKey=String(item[5]??"");
+  const entries=mods.map((m,i)=>({m,i,c:contentForMod(m)})).filter(x=>(x.m[8]||"training")===area&&String(x.m[5]??"")===topicKey)
+    .sort((a,b)=>((Number(a.c?.position)||a.i+1)-(Number(b.c?.position)||b.i+1)));
+  if(!entries.length){box.innerHTML='<div class="empty">No hay más contenidos.</div>';return;}
+  box.innerHTML=entries.map((x,index)=>{
+    const currentItem=x.i===current,complete=completed(x.m[0]),available=area==="additional"||unlocked(x.i);
+    return `<button type="button" class="playlist-item ${currentItem?"current":""}" ${available?"":"disabled"} onclick="openContent(${x.i})"><span class="playlist-number">${complete?"✓":index+1}</span><span class="playlist-copy"><span class="playlist-title">${escapeHtml(x.m[2])}</span><span class="playlist-sub">${escapeHtml(x.m[3])}</span></span><span class="playlist-state">${complete?"✓":currentItem?"●":available?"○":"🔒"}</span></button>`;
+  }).join("");
+}
+function continueToNextContent(){
+  const item=mods[current];if(!item)return;
+  const area=item[8]||"training",topicKey=String(item[5]??"");
+  const entries=mods.map((m,i)=>({m,i,c:contentForMod(m)})).filter(x=>(x.m[8]||"training")===area&&String(x.m[5]??"")===topicKey)
+    .sort((a,b)=>((Number(a.c?.position)||a.i+1)-(Number(b.c?.position)||b.i+1)));
+  const at=entries.findIndex(x=>x.i===current);const next=entries[at+1];
+  if(next&&(area==="additional"||unlocked(next.i))){openContent(next.i);return;}
+  const nav=document.querySelectorAll("#studentNav .navitem");studentPage(area==="additional"?"additional":"home",nav[area==="additional"?1:0]);
+}
+function openContent(i){
+  if(!unlocked(i))return;
+  stopVideoTracking();current=i;
+  const m=mods[i],isDone=completed(m[0]);
+  videoCurrentKey=String(m[0]);
+  document.querySelectorAll("#studentArea>section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById("s-content").classList.remove("hidden");
+  document.getElementById("ctitle").textContent=m[2];document.getElementById("csub").textContent=m[3];
+  renderContentPlaylist();
+  let body="";const url=safeHttpUrl(m[6]);
+  if(m[1]==="video"){
+    let resource="",provider=null;
+    const youtubeId=url?parseYouTubeId(url):null;const vimeoId=url?parseVimeoId(url):null;
+    if(url&&youtubeId){
+      provider="youtube";
+      const embed="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(youtubeId)+"?enablejsapi=1&origin="+encodeURIComponent(location.origin)+"&playsinline=1&rel=0";
+      resource=`<div class="video-player-shell"><iframe id="youtube-player" class="resource-frame" src="${escapeHtml(embed)}" title="${escapeHtml(m[2])}" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+    }else if(url&&vimeoId){
+      provider="vimeo";resource=`<div class="video-player-shell"><iframe id="vimeo-player" class="resource-frame" src="https://player.vimeo.com/video/${encodeURIComponent(vimeoId)}?dnt=1" title="${escapeHtml(m[2])}" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+    }else if(url&&/\.(mp4|webm|ogg)(?:[?#]|$)/i.test(url)){
+      provider="direct";resource=`<div class="video-player-shell"><video id="direct-video" class="resource-video" controls playsinline preload="metadata" src="${escapeHtml(url)}"></video></div>`;
+    }else{
+      resource=url?`<div class="video"><div class="play">▶</div><div style="font-size:12px;color:#aeb9cb">Este vídeo se abre fuera del reproductor del campus.</div><a class="go" style="text-decoration:none" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir vídeo externo ↗</a></div>`:`<div class="video"><div class="play">▶</div><div style="font-size:12px;color:#aeb9cb">No hay un enlace de vídeo válido configurado.</div></div>`;
+    }
+    videoTrackable=!!provider;videoProvider=provider;videoEnded=isDone;
+    body=`<div class="card content video-content">${resource}<h2 style="font-size:21px;letter-spacing:-.4px;margin:19px 0 4px">${escapeHtml(m[2])}</h2><div class="sectionsub">Reproduce el vídeo completo para registrar esta actividad formativa.</div><div class="watch-gate"><div class="watch-gate-head"><span>🔒</span><span id="videoGateMessage">${isDone?"Vídeo completado. Puedes continuar cuando quieras.":provider?"Debes reproducir el vídeo hasta el final para poder marcarlo como completado.":"Este enlace no permite verificar automáticamente que has visto el vídeo completo."}</span><b id="videoWatchPercent">0%</b></div><div class="watch-track"><div id="videoWatchFill" class="watch-track-fill"></div></div></div><div class="completion-actions"><span class="completion-status ${isDone?"":"hidden"}" id="videoCompletedBadge">✓ Completado</span><button id="markCompleteBtn" class="complete" onclick="finish()" ${(!provider||isDone)?"disabled":"disabled"}>✓ Marcar como completado</button><span id="continueContentWrap" class="${isDone?"":"hidden"}"><button class="continue-button" type="button" onclick="continueToNextContent()">Continuar al siguiente contenido →</button></span></div>${provider?"":'<div class="external-warning">Para verificar la reproducción completa, el administrador debe enlazar un vídeo de YouTube, Vimeo o un archivo MP4/WebM/OGG compatible.</div>'}</div>`;
+    document.getElementById("contentBody").innerHTML=body;
+    updateVideoGateUI();
+    if(provider==="youtube")startYouTubeTracking();
+    else if(provider==="vimeo")startVimeoTracking(vimeoId);
+    else if(provider==="direct")initDirectVideoTracking();
+    return;
+  }
+  let resource="";
+  if(m[1]==="ppt"){
+    const viewer=url?`<iframe class="resource-frame" src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}" title="${escapeHtml(m[2])}" referrerpolicy="strict-origin-when-cross-origin"></iframe>`:`<div class="ppt"><h2>${escapeHtml(m[2])}</h2><p>No hay un enlace de presentación configurado.</p></div>`;
+    resource=`${viewer}${url?`<p><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir o descargar presentación ↗</a></p>`:""}`;
+  }else if(m[1]==="document"){
+    const isPdf=url&&/\.pdf(?:[?#]|$)/i.test(url);const viewer=isPdf?`<iframe class="resource-frame" src="${escapeHtml(url)}" title="${escapeHtml(m[2])}" referrerpolicy="strict-origin-when-cross-origin"></iframe>`:`<div class="notice">Documento enlazado. Pulsa para abrirlo o descargarlo.</div>`;
+    resource=`${viewer}${url?`<p><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir o descargar documento ↗</a></p>`:""}`;
+  }else if(m[1]==="test"&&url){
+    resource=`<p style="font-size:13px;color:#718099">Evaluación externa enlazada por el administrador.</p><a class="go" style="display:inline-block;text-decoration:none" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir test ↗</a>`;
+  }else if(m[1]==="text"){
+    resource=url?`<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir contenido ↗</a>`:"<p>No hay un enlace de contenido configurado.</p>";
+  }else{
+    resource=`<p style="font-size:13px;color:#718099">Test de demostración. Debes acertar las dos preguntas para continuar.</p><div class="q"><b>1. ¿Qué debe ocurrir para desbloquear el siguiente contenido?</b><label class="option"><input type="radio" name="q1" value="a"> Completar el contenido actual</label><label class="option"><input type="radio" name="q1" value="b"> Entrar varias veces</label></div><div class="q"><b>2. ¿Puede el trabajador volver a un contenido completado?</b><label class="option"><input type="radio" name="q2" value="a"> Sí</label><label class="option"><input type="radio" name="q2" value="b"> No</label></div><button class="complete" onclick="test()">✓ Finalizar test</button>`;
+  }
+  const completion=isDone?`<div class="completion-actions"><span class="completion-status">✓ Contenido completado</span><button class="continue-button" type="button" onclick="continueToNextContent()">Continuar al siguiente contenido →</button></div>`:`<div class="completion-actions"><button class="complete" type="button" onclick="finish()">✓ Marcar como completado</button></div>`;
+  document.getElementById("contentBody").innerHTML=`<div class="card content"><h2 style="font-size:21px;margin-top:0">${escapeHtml(m[2])}</h2>${resource}${completion}</div>`;
+}
+async function finish(){
+  const m=mods[current];if(!m)return;
+  if(m[1]==="video"&&!completed(m[0])&&!videoEnded){alert("Para marcarlo como completado debes reproducir el vídeo hasta el final.");return;}
+  if(completed(m[0])){continueToNextContent();return;}
+  const dbContent=contentForMod(m);
+  if(!user||!dbContent){alert("No se ha encontrado el usuario o el contenido en Supabase.");return;}
+  const now=new Date().toISOString();
+  const {error}=await supabaseClient.from("progress").upsert({user_id:user.id,content_id:dbContent.id,completed:true,completed_at:now,updated_at:now},{onConflict:"user_id,content_id"});
+  if(error){console.error(error);alert("No se pudo guardar el progreso: "+error.message);return;}
+  if(!done.includes(m[0]))done.push(m[0]);
+  render();
+  if(m[1]==="video"){
+    const badge=document.getElementById("videoCompletedBadge");if(badge)badge.classList.remove("hidden");
+    const mark=document.getElementById("markCompleteBtn");if(mark){mark.disabled=true;mark.classList.add("hidden");}
+    const next=document.getElementById("continueContentWrap");if(next)next.classList.remove("hidden");
+    const note=document.getElementById("videoGateMessage");if(note)note.textContent="Vídeo completado. Ya puedes continuar al siguiente contenido.";
+    renderContentPlaylist();
+  }else{
+    openContent(current);
+  }
+}
+function test(){
+  const a=document.querySelector('input[name="q1"]:checked');
+  const b=document.querySelector('input[name="q2"]:checked');
+  if(!a||!b)return alert("Completa todas las preguntas.");
+  if(a.value!=="a"||b.value!=="a")return alert("Hay una respuesta incorrecta. Inténtalo de nuevo.");
+  finish();
+}
+async function sendComment(){
+  const s=document.getElementById("subject").value.trim();
+  const c=document.getElementById("comment").value.trim();
+  if(!s||!c)return alert("Completa el asunto y el comentario.");
+  const {error}=await supabaseClient.from("course_questions").insert({
+    user_id:user.id,subject:s,message:c
+  });
+  if(error){
+    console.error(error);
+    alert("No se pudo enviar la duda: "+error.message);
+    return;
+  }
+  document.getElementById("subject").value="";
+  document.getElementById("comment").value="";
+  await loadQuestions();
+  alert("Duda enviada correctamente.");
+}
+function renderMyQuestions(){
+  const box=document.getElementById("myQuestions");if(!box)return;
+  if(!questions.length){box.innerHTML='<div class="empty">Todavía no has enviado consultas. Cuando tengas una duda, podrás escribir al equipo de formación desde este apartado.</div>';return;}
+  const unreadCount=questions.filter(questionUnreadForStudent).length;
+  box.innerHTML=`<div class="manage-toolbar" style="margin:22px 0 12px"><div><h3 style="font-size:16px;margin:0">Mis consultas</h3><div class="sectionsub">Aquí puedes revisar tus dudas y las respuestas del equipo.</div></div>${unreadCount?`<span class="badge open">${unreadCount} respuesta(s) nueva(s)</span>`:""}</div>`+questions.map(q=>{
+    const unread=questionUnreadForStudent(q);
+    return `<article class="question-card"><div class="question-top"><div><div class="question-subject">${escapeHtml(q.subject)} <span class="badge ${q.status==="answered"?"done":"open"}">${q.status==="answered"?"Respondida":q.status==="closed"?"Cerrada":"Pendiente"}</span> ${unread?'<span class="badge open">Nueva respuesta</span>':""}</div><div class="question-meta">${formatDate(q.created_at)}</div></div><button class="danger-button" type="button" onclick="deleteMyQuestion(${Number(q.id)})">Eliminar</button></div><div class="question-message">${escapeHtml(q.message)}</div>${q.admin_reply?`<div class="answer-box"><div class="answer-heading"><span>✉</span> Respuesta del equipo de formación ${unread?'<span class="badge open">Nueva</span>':""}</div><div class="answer-text">${escapeHtml(q.admin_reply)}</div>${q.answered_at?`<div class="question-meta" style="margin-top:9px">Respondida el ${formatDate(q.answered_at)}</div>`:""}</div>`:'<div class="question-meta">El equipo de formación todavía no ha respondido.</div>'}</article>`;
+  }).join("");
+}
+async function deleteMyQuestion(id){
+  const q=questions.find(item=>Number(item.id)===Number(id));if(!q)return;
+  if(!confirm(`¿Eliminar definitivamente tu consulta «${q.subject}»? Esta acción no se puede deshacer.`))return;
+  const {error}=await supabaseClient.from("course_questions").delete().eq("id",id).eq("user_id",user.id);
+  if(error){console.error(error);alert("No se pudo eliminar la consulta: "+error.message);return;}
+  questions=questions.filter(item=>Number(item.id)!==Number(id));renderMyQuestions();updateStudentReplyBadge();
+  alert("Consulta eliminada.");
+}
+async function adminPage(page,el){
+  document.querySelectorAll("#adminArea>section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById("a-"+page).classList.remove("hidden");
+  document.querySelectorAll("#adminNav .navitem").forEach(x=>x.classList.remove("active"));
+  if(el)el.classList.add("active");
+  await renderAdmin();
+  if(page==="manage")await refreshManagerData();
+  if(page==="comments")await markAdminQuestionsSeen();
+}
+function managerMessage(message,ok=true){
+  const box=document.getElementById("managerMessage");
+  if(!box)return;
+  box.className="status-note "+(ok?"ok":"bad");
+  box.textContent=message;
+}
+function clearManagerMessage(){const box=document.getElementById("managerMessage");if(box){box.className="hidden";box.textContent=""}}
+async function refreshManagerData(){
+  if(!profile||profile.role!=="admin")return;
+  clearManagerMessage();
+  const [t,c]=await Promise.all([
+    supabaseClient.from("course_topics").select("id,title,description,position,is_active,created_at").order("position"),
+    supabaseClient.from("course_contents").select("id,slug,title,content_type,url,position,is_active,topic_id,display_area,created_at").order("position")
+  ]);
+  if(t.error||c.error){
+    console.error(t.error||c.error);
+    managerMessage("No se pudieron cargar los temas o contenidos: "+(t.error||c.error).message,false);
+    return;
+  }
+  adminTopics=t.data||[];adminContents=c.data||[];
+  topics=adminTopics;contents=adminContents;mods=contents.length?contents.map(normalizeContent):fallbackMods;
+  renderContentManager();
+}
+function renderContentManager(){
+  const box=document.getElementById("topicsAdminList");if(!box)return;
+  const areaTitle=area=>area==="additional"?"Contenido adicional":"Formación";
+  const groupMarkup=(items,topicId,area)=>{
+    const sorted=[...items].sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+    return `<div class="lane"><div class="lane-head"><span>${areaTitle(area)} <small>· ${sorted.length} contenido(s)</small></span><small>Arrastra desde ⠿ o usa ↑ / ↓</small></div><div class="topic-items drop-zone" data-topic-id="${topicId==null?"":topicId}" data-display-area="${area}" ondragover="allowContentDrop(event)" ondrop="dropContent(event,this)">${sorted.map(renderContentRow).join("")}</div></div>`;
+  };
+  const renderContentRow=c=>`<div class="content-row" data-content-id="${c.id}" ondragover="allowContentDrop(event)" ondrop="dropContent(event,this)">
+    <div class="drag-handle" draggable="true" ondragstart="contentDragStart(event,${c.id})" ondragend="contentDragEnd(event)" title="Arrastrar desde aquí para mover" aria-label="Arrastrar para reordenar">⠿</div>
+    <div class="icon">${c.content_type==="video"?"▶":c.content_type==="test"?"✓":c.content_type==="presentation"||c.content_type==="ppt"?"▤":"▧"}</div>
+    <div class="mi"><div class="mt">${escapeHtml(c.title)}</div><div class="mm">${escapeHtml(contentTypeLabel(c.content_type))} · Orden ${Number(c.position)||0}</div>${c.url?`<div class="mm"><a href="${escapeHtml(safeHttpUrl(c.url)||"#")}" target="_blank" rel="noopener noreferrer">Abrir enlace ↗</a></div>`:""}</div>
+    <span class="area-badge">${areaTitle(c.display_area||"training")}</span>
+    <span class="badge ${c.is_active?"done":"lock"}">${c.is_active?"Publicado":"Borrador"}</span>
+    <div class="sort-actions"><button type="button" title="Mover arriba" aria-label="Mover arriba" onclick="moveContent(${c.id},-1)">↑</button><button type="button" title="Mover abajo" aria-label="Mover abajo" onclick="moveContent(${c.id},1)">↓</button></div>
+    <div class="item-actions"><button class="secondary" type="button" onclick="editContent(${c.id})">Editar</button><button class="secondary" type="button" onclick="toggleContent(${c.id})">${c.is_active?"Retirar":"Publicar"}</button><button class="danger-button" type="button" onclick="deleteContent(${c.id})">Eliminar</button></div>
+  </div>`;
+  let out="";
+  out+=adminTopics.map(t=>{
+    const items=adminContents.filter(c=>String(c.topic_id??"")===String(t.id));
+    const training=items.filter(c=>(c.display_area||"training")==="training");
+    const additional=items.filter(c=>(c.display_area||"training")==="additional");
+    return `<div class="card topic-card"><div class="topic-top"><div style="flex:1;min-width:200px"><div class="topic-title">${escapeHtml(t.title)} <span class="badge ${t.is_active?"done":"lock"}">${t.is_active?"Publicado":"Borrador"}</span></div><div class="topic-description">${escapeHtml(t.description||"Sin descripción")}</div><div class="sectionsub">Orden ${Number(t.position)||0} · ${items.length} contenido(s)</div></div><div class="item-actions"><button class="secondary" type="button" onclick="editTopic(${t.id})">Editar tema</button><button class="secondary" type="button" onclick="toggleTopic(${t.id})">${t.is_active?"Retirar publicación":"Publicar tema"}</button><button class="primary" style="width:auto;margin:0;padding:10px 12px" type="button" onclick="showContentForm(${t.id},'training')">＋ Añadir a Formación</button><button class="secondary" type="button" onclick="showContentForm(${t.id},'additional')">＋ Añadir adicional</button></div></div>${groupMarkup(training,t.id,"training")}${groupMarkup(additional,t.id,"additional")}</div>`;
+  }).join("");
+  const loose=adminContents.filter(c=>c.topic_id==null);
+  if(loose.length||!adminTopics.length){
+    const training=loose.filter(c=>(c.display_area||"training")==="training");
+    const additional=loose.filter(c=>(c.display_area||"training")==="additional");
+    out+=`<div class="card topic-card"><div class="topic-top"><div><div class="topic-title">Contenidos sin tema</div><div class="topic-description">El contenido puede publicarse de forma independiente. Formación respeta su orden; Contenido adicional siempre está disponible.</div></div><div class="item-actions"><button class="secondary" type="button" onclick="showContentForm(null,'training')">＋ Añadir a Formación</button><button class="secondary" type="button" onclick="showContentForm(null,'additional')">＋ Añadir adicional</button></div></div>${groupMarkup(training,null,"training")}${groupMarkup(additional,null,"additional")}</div>`;
+  }
+  if(!out)out='<div class="card empty">Todavía no hay temas. Pulsa <b>Crear tema</b> para empezar.</div>';
+  box.innerHTML=out;
+}
+let draggingContentId=null;
+function contentDragStart(event,id){
+  draggingContentId=String(id);
+  if(event.dataTransfer){event.dataTransfer.effectAllowed="move";event.dataTransfer.setData("text/plain",String(id));}
+  const row=event.currentTarget.closest(".content-row");
+  if(row){row.classList.add("dragging");}
+}
+function contentDragEnd(event){
+  const row=event.currentTarget.closest(".content-row");
+  if(row)row.classList.remove("dragging");
+  document.querySelectorAll(".content-row.drop-target").forEach(x=>x.classList.remove("drop-target"));
+  document.querySelectorAll(".drop-zone.drag-over").forEach(x=>x.classList.remove("drag-over"));
+  draggingContentId=null;
+}
+function allowContentDrop(event){
+  event.preventDefault();
+  if(event.dataTransfer)event.dataTransfer.dropEffect="move";
+  const target=event.currentTarget;
+  if(target.classList?.contains("content-row"))target.classList.add("drop-target");
+  else if(target.classList?.contains("drop-zone"))target.classList.add("drag-over");
+}
+async function dropContent(event,target){
+  event.preventDefault();event.stopPropagation();
+  const id=(event.dataTransfer&&event.dataTransfer.getData("text/plain"))||draggingContentId;
+  if(!id)return;
+  const source=[...document.querySelectorAll("#topicsAdminList .content-row")].find(row=>String(row.dataset.contentId)===String(id));
+  const group=target.classList.contains("drop-zone")?target:target.closest(".drop-zone");
+  if(!source||!group||source===target)return;
+  if(target.classList.contains("content-row")){
+    const rect=target.getBoundingClientRect();
+    if(event.clientY>rect.top+rect.height/2)target.after(source);else target.before(source);
+  }else{
+    group.appendChild(source);
+  }
+  document.querySelectorAll(".content-row.drop-target").forEach(x=>x.classList.remove("drop-target"));
+  document.querySelectorAll(".drop-zone.drag-over").forEach(x=>x.classList.remove("drag-over"));
+  await persistVisualContentOrder();
+}
+async function persistVisualContentOrder(){
+  if(!profile||profile.role!=="admin")return;
+  const rows=[];
+  document.querySelectorAll("#topicsAdminList .drop-zone").forEach(group=>{
+    const topicId=group.dataset.topicId?Number(group.dataset.topicId):null;
+    const area=group.dataset.displayArea==="additional"?"additional":"training";
+    [...group.querySelectorAll(":scope > .content-row")].forEach((row,index)=>{
+      const id=Number(row.dataset.contentId);
+      const old=adminContents.find(c=>Number(c.id)===id);
+      const payload={position:index+1,topic_id:topicId,display_area:area};
+      if(old&&(Number(old.position)!==payload.position||String(old.topic_id??"")!==String(topicId??"")||(old.display_area||"training")!==area))rows.push({id,payload});
+    });
+  });
+  if(!rows.length){await refreshManagerData();managerMessage("Ese contenido ya está en esa posición.",true);return}
+  managerMessage("Guardando nuevo orden…",true);
+  for(const item of rows){
+    const {error}=await supabaseClient.from("course_contents").update(item.payload).eq("id",item.id);
+    if(error){console.error(error);await refreshManagerData();managerMessage("No se pudo guardar el orden: "+error.message,false);return;}
+  }
+  await refreshManagerData();await loadTopics();await loadContents();await loadProgress();managerMessage("Orden y ubicación guardados correctamente.",true);
+}
+async function moveContent(id,delta){
+  const item=adminContents.find(c=>Number(c.id)===Number(id));if(!item)return;
+  const area=item.display_area||"training";
+  const siblings=adminContents.filter(c=>String(c.topic_id??"")===String(item.topic_id??"")&&(c.display_area||"training")===area).sort((a,b)=>(Number(a.position)||0)-(Number(b.position)||0));
+  const index=siblings.findIndex(c=>Number(c.id)===Number(id));const next=index+delta;
+  if(index<0||next<0||next>=siblings.length){managerMessage(delta<0?"Este contenido ya está primero en su grupo.":"Este contenido ya está al final de su grupo.",true);return;}
+  [siblings[index],siblings[next]]=[siblings[next],siblings[index]];
+  for(let i=0;i<siblings.length;i++){
+    const {error}=await supabaseClient.from("course_contents").update({position:i+1}).eq("id",siblings[i].id);
+    if(error){console.error(error);await refreshManagerData();managerMessage("No se pudo reordenar: "+error.message,false);return;}
+  }
+  await refreshManagerData();await loadContents();await loadProgress();managerMessage("Orden actualizado correctamente.",true);
+}
+function showTopicForm(){
+  editingTopicId=null;document.getElementById("topicForm").reset();
+  document.getElementById("topicFormHeading").textContent="Crear tema";
+  document.getElementById("topicPosition").value=String(adminTopics.length+1);
+  document.getElementById("topicActive").checked=false;
+  document.getElementById("topicFormCard").classList.remove("hidden");
+  document.getElementById("contentFormCard").classList.add("hidden");
+  document.getElementById("topicTitle").focus();
+}
+function editTopic(id){
+  const t=adminTopics.find(x=>String(x.id)===String(id));if(!t)return;
+  editingTopicId=t.id;document.getElementById("topicForm").reset();
+  document.getElementById("topicFormHeading").textContent="Editar tema";
+  document.getElementById("topicTitle").value=t.title||"";
+  document.getElementById("topicDescription").value=t.description||"";
+  document.getElementById("topicPosition").value=String(t.position??0);
+  document.getElementById("topicActive").checked=!!t.is_active;
+  document.getElementById("topicFormCard").classList.remove("hidden");
+  document.getElementById("contentFormCard").classList.add("hidden");
+  document.getElementById("topicTitle").focus();
+}
+function cancelTopicForm(){document.getElementById("topicFormCard").classList.add("hidden");editingTopicId=null}
+async function saveTopic(event){
+  event.preventDefault();if(!profile||profile.role!=="admin")return alert("Solo el administrador puede gestionar temas.");
+  const payload={title:document.getElementById("topicTitle").value.trim(),description:document.getElementById("topicDescription").value.trim()||null,position:Math.max(0,Number(document.getElementById("topicPosition").value)||0),is_active:document.getElementById("topicActive").checked};
+  if(!payload.title)return alert("Escribe el nombre del tema.");
+  const wasEditing=editingTopicId!==null;
+  const req=wasEditing?supabaseClient.from("course_topics").update(payload).eq("id",editingTopicId):supabaseClient.from("course_topics").insert(payload);
+  const {error}=await req;
+  if(error){console.error(error);managerMessage("No se pudo guardar el tema: "+error.message,false);return}
+  cancelTopicForm();await refreshManagerData();managerMessage(wasEditing?"Tema actualizado correctamente.":"Tema creado correctamente.",true);editingTopicId=null;
+}
+function showContentForm(topicId=null,area="training"){
+  editingContentId=null;document.getElementById("contentForm").reset();
+  const sel=document.getElementById("contentTopic");
+  sel.innerHTML='<option value="">Sin tema asignado</option>'+adminTopics.map(t=>`<option value="${t.id}">${escapeHtml(t.title)}${t.is_active?"":" (borrador)"}</option>`).join("");
+  sel.value=topicId==null?"":String(topicId);
+  document.getElementById("contentFormHeading").textContent="Añadir contenido";
+  document.getElementById("contentArea").value=area==="additional"?"additional":"training";
+  document.getElementById("contentPosition").value=String(adminContents.filter(c=>String(c.topic_id??"")===String(topicId??"")&&(c.display_area||"training")===(area==="additional"?"additional":"training")).length+1);
+  document.getElementById("contentActive").checked=false;
+  document.getElementById("contentUrl").required=true;
+  document.getElementById("contentFormCard").classList.remove("hidden");
+  document.getElementById("topicFormCard").classList.add("hidden");
+  document.getElementById("contentTitle").focus();
+}
+function editContent(id){
+  const c=adminContents.find(x=>String(x.id)===String(id));if(!c)return;
+  editingContentId=c.id;document.getElementById("contentForm").reset();
+  const sel=document.getElementById("contentTopic");
+  sel.innerHTML='<option value="">Sin tema asignado</option>'+adminTopics.map(t=>`<option value="${t.id}">${escapeHtml(t.title)}${t.is_active?"":" (borrador)"}</option>`).join("");
+  sel.value=c.topic_id==null?"":String(c.topic_id);
+  document.getElementById("contentArea").value=(c.display_area||"training")==="additional"?"additional":"training";
+  document.getElementById("contentFormHeading").textContent="Editar contenido";
+  document.getElementById("contentTitle").value=c.title||"";
+  const known=["video","presentation","document","test"];
+  document.getElementById("contentType").value=known.includes(c.content_type)?c.content_type:(c.content_type==="ppt"?"presentation":"document");
+  document.getElementById("contentUrl").value=c.url||"";
+  document.getElementById("contentPosition").value=String(c.position??0);
+  document.getElementById("contentActive").checked=!!c.is_active;
+  document.getElementById("contentFormCard").classList.remove("hidden");
+  document.getElementById("topicFormCard").classList.add("hidden");
+  document.getElementById("contentTitle").focus();
+}
+function cancelContentForm(){document.getElementById("contentFormCard").classList.add("hidden");editingContentId=null}
+async function saveContent(event){
+  event.preventDefault();if(!profile||profile.role!=="admin")return alert("Solo el administrador puede gestionar contenidos.");
+  const title=document.getElementById("contentTitle").value.trim();
+  const url=safeHttpUrl(document.getElementById("contentUrl").value.trim());
+  if(!title)return alert("Escribe el título del contenido.");
+  if(!url)return alert("Introduce un enlace válido que empiece por http:// o https://.");
+  const old=editingContentId?adminContents.find(c=>String(c.id)===String(editingContentId)):null;
+  const payload={title,content_type:document.getElementById("contentType").value,url,position:Math.max(0,Number(document.getElementById("contentPosition").value)||0),is_active:document.getElementById("contentActive").checked,topic_id:document.getElementById("contentTopic").value?Number(document.getElementById("contentTopic").value):null,display_area:document.getElementById("contentArea").value==="additional"?"additional":"training",slug:old?.slug||(`${slugify(title)}-${Date.now().toString().slice(-6)}`)};
+  const req=editingContentId?supabaseClient.from("course_contents").update(payload).eq("id",editingContentId):supabaseClient.from("course_contents").insert(payload);
+  const {error}=await req;
+  if(error){console.error(error);managerMessage("No se pudo guardar el contenido: "+error.message,false);return}
+  cancelContentForm();await refreshManagerData();await loadTopics();await loadContents();await loadProgress();await renderAdmin();managerMessage(old?"Contenido actualizado correctamente.":"Contenido creado correctamente.",true);
+}
+async function toggleTopic(id){
+  const t=adminTopics.find(x=>String(x.id)===String(id));if(!t)return;
+  const {error}=await supabaseClient.from("course_topics").update({is_active:!t.is_active}).eq("id",id);
+  if(error){console.error(error);managerMessage("No se pudo cambiar la publicación del tema: "+error.message,false);return}
+  await refreshManagerData();managerMessage(!t.is_active?"Tema publicado. Sus contenidos activos ya pueden aparecer a los estudiantes.":"Tema retirado de la vista de los estudiantes.",true);
+}
+async function toggleContent(id){
+  const c=adminContents.find(x=>String(x.id)===String(id));if(!c)return;
+  const {error}=await supabaseClient.from("course_contents").update({is_active:!c.is_active}).eq("id",id);
+  if(error){console.error(error);managerMessage("No se pudo cambiar la publicación del contenido: "+error.message,false);return}
+  await refreshManagerData();await loadContents();await loadProgress();await renderAdmin();managerMessage(!c.is_active?"Contenido publicado.":"Contenido retirado de la vista de los estudiantes.",true);
+}
+async function deleteContent(id){
+  const c=adminContents.find(x=>String(x.id)===String(id));if(!c)return;
+  const confirmed=confirm(`¿Eliminar definitivamente «${c.title}»?
+
+Esta acción no se puede deshacer. También se borrará el progreso registrado para este contenido en todos los perfiles de estudiantes. Si solo quieres ocultarlo, usa «Retirar».`);
+  if(!confirmed)return;
+  if(!profile||profile.role!=="admin"){managerMessage("Solo el administrador puede eliminar contenidos.",false);return;}
+  // Delete progress first to avoid a foreign-key restriction on course_contents.
+  const progressDelete=await supabaseClient.from("progress").delete().eq("content_id",id);
+  if(progressDelete.error){console.error(progressDelete.error);managerMessage("No se pudo eliminar el contenido porque no se han podido borrar sus registros de progreso. Comprueba el permiso de eliminación para administradores en progress: "+progressDelete.error.message,false);return;}
+  const {error}=await supabaseClient.from("course_contents").delete().eq("id",id);
+  if(error){console.error(error);managerMessage("No se pudo eliminar el contenido: "+error.message,false);return;}
+  await refreshManagerData();await loadTopics();await loadContents();await loadProgress();await renderAdmin();
+  managerMessage("Contenido eliminado definitivamente.",true);
+}
+
+async function renderAdmin(){
+  if(!profile||profile.role!=="admin")return;
+  const [pr,prog,qs,dir]=await Promise.all([
+    supabaseClient.from("profiles").select("id,full_name,role"),
+    supabaseClient.from("progress").select("user_id,content_id,completed,completed_at").eq("completed",true),
+    supabaseClient.from("course_questions").select("id,user_id,subject,message,status,admin_reply,created_at,answered_at,admin_seen_at,student_reply_read_at"),
+    supabaseClient.rpc("admin_user_directory")
+  ]);
+  for(const r of [pr,prog,qs,dir]){
+    if(r.error){console.error(r.error);alert("No se pudo cargar el panel. Comprueba que has ejecutado la migración SQL de Campus Formación. Detalle: "+r.error.message);return;}
+  }
+  const emailById=new Map((dir.data||[]).map(x=>[String(x.id),x.email||""]));
+  const profiles=(pr.data||[]).map(p=>({...p,email:emailById.get(String(p.id))||""}));
+  const progressRows=prog.data||[];adminQuestions=qs.data||[];adminDirectory=profiles;
+  const students=profiles.filter(p=>p.role!=="admin");
+  const trackedContents=publishedTrainingContents();const trackedIds=new Set(trackedContents.map(c=>String(c.id)));const total=trackedContents.length;
+  const counts=new Map();
+  progressRows.filter(row=>trackedIds.has(String(row.content_id))).forEach(row=>counts.set(row.user_id,(counts.get(row.user_id)||0)+1));
+  const finished=students.filter(p=>(counts.get(p.id)||0)>=total&&total>0).length;
+  const pending=adminQuestions.filter(q=>q.status!=="answered"&&q.status!=="closed").length;
+  document.getElementById("adminStats").innerHTML=`<div class="card stat"><span>Alumnos registrados</span><b>${students.length}</b></div><div class="card stat"><span>Alumnos con actividad</span><b class="blue">${students.filter(p=>(counts.get(p.id)||0)>0).length}</b></div><div class="card stat"><span>Formación finalizada</span><b class="green">${finished}</b></div><div class="card stat"><span>Dudas pendientes</span><b class="orange">${pending}</b></div>`;
+  const rows=students.map(p=>({p,n:counts.get(p.id)||0,pct:Math.round((counts.get(p.id)||0)/Math.max(total,1)*100)}));
+  const userCell=p=>`<div><b>${escapeHtml(p.email||"Correo no disponible")}</b><div class="reply-byline">${escapeHtml(p.full_name||"")}</div></div>`;
+  const tableRows=rows.length?rows.map(x=>`<tr><td>${userCell(x.p)}</td><td><div class="progress-cell"><b>${x.pct}%</b><div class="mini-progress"><span style="width:${Math.min(100,x.pct)}%"></span></div></div></td><td>${x.n} / ${total}</td><td><span class="badge ${x.pct===100?"done":"open"}">${x.pct===100?"Finalizado":x.n?"En curso":"Sin empezar"}</span></td></tr>`).join(""):'<tr><td colspan="4" style="text-align:center;color:#718099;padding:35px">Todavía no hay perfiles de alumnos.</td></tr>';
+  document.getElementById("recentBody").innerHTML=tableRows;
+  document.getElementById("coursesBody").innerHTML=rows.length?rows.map(x=>`<tr><td>${userCell(x.p)}</td><td><div class="progress-cell"><b>${x.pct}%</b><div class="mini-progress"><span style="width:${Math.min(100,x.pct)}%"></span></div></div></td><td>${x.n} / ${total}</td><td><span class="badge ${x.pct===100?"done":"open"}">${x.pct===100?"Finalizado":x.n?"En curso":"Sin empezar"}</span></td><td><span class="view" onclick="detail('${x.p.id}')">Ver ficha</span></td></tr>`).join(""):'<tr><td colspan="5" style="text-align:center;color:#718099;padding:35px">Todavía no hay trabajadores registrados.</td></tr>';
+  updateAdminQuestionBadge();renderCommentsTable();
+  window._adminCache={profiles,progressRows,allQ:adminQuestions,contents};
+}
+function setCommentFilter(value,el){
+  commentFilter=value;document.querySelectorAll("[data-comment-filter]").forEach(x=>x.classList.toggle("active",x===el));renderCommentsTable();
+}
+function renderCommentsTable(){
+  const body=document.getElementById("commentsBody");if(!body)return;
+  const allQ=adminQuestions||[];const profiles=adminDirectory||[];
+  const search=(document.getElementById("commentSearch")?.value||"").trim().toLowerCase();
+  document.getElementById("commentCountAll").textContent="("+allQ.length+")";
+  document.getElementById("commentCountPending").textContent="("+allQ.filter(q=>q.status!=="answered"&&q.status!=="closed").length+")";
+  document.getElementById("commentCountAnswered").textContent="("+allQ.filter(q=>q.status==="answered").length+")";
+  const mapped=allQ.map(q=>({...q,person:profiles.find(p=>String(p.id)===String(q.user_id))}));
+  const filtered=mapped.filter(q=>{
+    const matchesFilter=commentFilter==="all"||(commentFilter==="pending"&&q.status!=="answered"&&q.status!=="closed")||(commentFilter==="answered"&&q.status==="answered");
+    const hay=[q.person?.email,q.person?.full_name,q.subject,q.message,q.admin_reply].join(" ").toLowerCase();
+    return matchesFilter&&(!search||hay.includes(search));
+  }).sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+  body.innerHTML=filtered.length?filtered.map(q=>`<tr><td><div><b>${escapeHtml(q.person?.email||"Correo no disponible")}</b><div class="reply-byline">${escapeHtml(q.person?.full_name||"")}</div></div></td><td><b>${escapeHtml(q.subject)}</b></td><td><div class="comment-excerpt">${escapeHtml(q.message)}</div></td><td>${formatDate(q.created_at)}</td><td><span class="badge ${q.status==="answered"?"done":"open"}">${q.status==="answered"?"Respondida":q.status==="closed"?"Cerrada":"Pendiente"}</span>${!q.admin_seen_at?'<div class="reply-byline" style="color:#2477e8;font-weight:800">Nueva</div>':""}</td><td>${q.admin_reply?'<span class="badge done">Enviada</span>':"—"}</td><td><button type="button" class="go" onclick="replyQuestion(${q.id})">${q.admin_reply?"Editar respuesta":"Responder"}</button></td></tr>`).join(""):'<tr><td colspan="7" style="text-align:center;color:#718099;padding:38px">No hay consultas que coincidan con estos filtros.</td></tr>';
+}
+function replyQuestion(id){
+  const q=adminQuestions.find(x=>Number(x.id)===Number(id));if(!q)return;
+  replyingQuestionId=q.id;
+  const p=adminDirectory.find(x=>String(x.id)===String(q.user_id));
+  document.getElementById("replyUserEmail").textContent=p?.email||"Correo no disponible";
+  document.getElementById("replyQuestionSummary").textContent="Asunto: "+q.subject+"\n\nConsulta del trabajador:\n"+q.message;
+  document.getElementById("replyText").value=q.admin_reply||"";
+  document.getElementById("replyModal").classList.remove("hidden");
+  document.getElementById("replyText").focus();
+}
+function closeReplyModal(){document.getElementById("replyModal")?.classList.add("hidden");replyingQuestionId=null;}
+async function saveReply(event){
+  event.preventDefault();if(!profile||profile.role!=="admin"||!replyingQuestionId)return;
+  const reply=document.getElementById("replyText").value.trim();if(!reply)return alert("Escribe la respuesta antes de enviarla.");
+  const q=adminQuestions.find(x=>Number(x.id)===Number(replyingQuestionId));if(!q)return;
+  const {error}=await supabaseClient.from("course_questions").update({admin_reply:reply,status:"answered",answered_at:new Date().toISOString(),student_reply_read_at:null,admin_seen_at:q.admin_seen_at||new Date().toISOString()}).eq("id",replyingQuestionId);
+  if(error){console.error(error);alert("No se pudo guardar la respuesta: "+error.message);return;}
+  closeReplyModal();await renderAdmin();
+  const msg=document.getElementById("managerMessage");if(msg&&document.getElementById("a-manage")&&!document.getElementById("a-manage").classList.contains("hidden"))managerMessage("Respuesta guardada y enviada al perfil del trabajador.",true);
+  alert("Respuesta guardada. El trabajador verá una notificación en Campus Formación.");
+}
+async function detail(uid){
+  const cache=window._adminCache||{};const p=(cache.profiles||[]).find(x=>String(x.id)===String(uid));
+  const trackedContents=publishedTrainingContents();const trackedIds=new Set(trackedContents.map(c=>String(c.id)));
+  const rows=(cache.progressRows||[]).filter(x=>String(x.user_id)===String(uid)&&trackedIds.has(String(x.content_id)));
+  document.getElementById("muser").textContent=p?.full_name||p?.email||"Ficha del trabajador";
+  const total=trackedContents.length;const pctNow=total?Math.round(rows.length/total*100):0;
+  document.getElementById("mstats").innerHTML=`<div class="dstat"><small>Correo electrónico</small><b style="font-size:12px;overflow-wrap:anywhere">${escapeHtml(p?.email||"No disponible")}</b></div><div class="dstat"><small>Progreso</small><b>${pctNow}%</b></div><div class="dstat"><small>Contenidos completados</small><b>${rows.length} / ${total}</b></div>`;
+  const keys=new Set(rows.map(r=>{const c=contents.find(item=>String(item.id)===String(r.content_id));return c?normalizeContent(c)[0]:null}).filter(Boolean));
+  document.getElementById("mdone").innerHTML=mods.filter(m=>(m[8]||"training")!=="additional"&&keys.has(m[0])).map(m=>`<div class="q">${escapeHtml(m[2])} <span class="badge done">Completado</span></div>`).join("")||'<div class="sectionsub">Todavía no hay contenidos completados.</div>';
+  document.getElementById("modal").classList.remove("hidden");
+}
+function closeModal(){document.getElementById("modal").classList.add("hidden")}
+function exportCSV(){
+  const cache=window._adminCache||{};const profiles=cache.profiles||[],progressRows=cache.progressRows||[],qs=cache.allQ||[];
+  const trackedContents=publishedTrainingContents();const trackedIds=new Set(trackedContents.map(c=>String(c.id)));const total=trackedContents.length;
+  const rows=[["Correo electrónico","Nombre","Progreso","Contenidos completados","Consultas","Formación finalizada"]];
+  profiles.filter(p=>p.role!=="admin").forEach(p=>{
+    const n=progressRows.filter(r=>String(r.user_id)===String(p.id)&&trackedIds.has(String(r.content_id))).length;
+    rows.push([p.email||"",p.full_name||"",(total?Math.round(n/total*100):0)+"%",n,qs.filter(q=>String(q.user_id)===String(p.id)).length,total>0&&n>=total?"Sí":"No"]);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(";")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="campus_formacion_seguimiento.csv";a.click();URL.revokeObjectURL(a.href);
+}
+
+
+// Recuperar sesión al recargar. El rol se comprueba de nuevo en la base de datos.
+(async function restoreSession(){
+  if(!supabaseClient)return;
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error||!data.session)return;
+  try{
+    user=data.session.user;
+    const {data:prof,error:pe}=await supabaseClient.from("profiles")
+      .select("id,full_name,role").eq("id",user.id).single();
+    if(pe)throw pe;
+    profile=prof;
+    await loadTopics();
+    await loadContents();
+    await loadProgress();
+    await loadQuestions();
+    await showApp();
+  }catch(e){
+    console.error(e);
+    await supabaseClient.auth.signOut();
+  }
+})();
+</script>
+</body>
+</html>
