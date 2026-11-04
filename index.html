@@ -937,8 +937,6 @@ if (m[1] === "ppt") {
                 : ""
         }
     `;
-
-}
   }else if(m[1]==="document"){
     const isPdf=url&&/\.pdf(?:[?#]|$)/i.test(url);const viewer=isPdf?`<iframe class="resource-frame" src="${escapeHtml(url)}" title="${escapeHtml(m[2])}" referrerpolicy="strict-origin-when-cross-origin"></iframe>`:`<div class="notice">Documento enlazado. Pulsa para abrirlo o descargarlo.</div>`;
     resource=`${viewer}${url?`<p><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir o descargar documento ↗</a></p>`:""}`;
