@@ -863,9 +863,82 @@ function openContent(i){
     return;
   }
   let resource="";
-  if(m[1]==="ppt"){
-    const viewer=url?`<iframe class="resource-frame" src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}" title="${escapeHtml(m[2])}" referrerpolicy="strict-origin-when-cross-origin"></iframe>`:`<div class="ppt"><h2>${escapeHtml(m[2])}</h2><p>No hay un enlace de presentación configurado.</p></div>`;
-    resource=`${viewer}${url?`<p><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir o descargar presentación ↗</a></p>`:""}`;
+if (m[1] === "ppt") {
+
+    let presentationEmbedUrl = null;
+
+    if (url) {
+        try {
+            const parsedUrl = new URL(url);
+
+            // Google Slides
+            if (
+                parsedUrl.hostname.includes("docs.google.com") &&
+                parsedUrl.pathname.includes("/presentation/d/")
+            ) {
+                const match = parsedUrl.pathname.match(
+                    /\/presentation\/d\/([^/]+)/
+                );
+
+                if (match && match[1]) {
+                    const presentationId = match[1];
+
+                    presentationEmbedUrl =
+                        `https://docs.google.com/presentation/d/${presentationId}/embed?start=false&loop=false&delayms=3000`;
+                }
+            }
+
+            // PowerPoint / Microsoft Office
+            else {
+                presentationEmbedUrl =
+                    `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+            }
+
+        } catch (error) {
+            console.error(
+                "Error al procesar el enlace de presentación:",
+                error
+            );
+        }
+    }
+
+    const viewer = presentationEmbedUrl
+        ? `
+            <iframe
+                class="resource-frame"
+                src="${escapeHtml(presentationEmbedUrl)}"
+                title="${escapeHtml(m[2])}"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+            </iframe>
+        `
+        : `
+            <div class="ppt">
+                <h2>${escapeHtml(m[2])}</h2>
+                <p>No hay un enlace de presentación válido configurado.</p>
+            </div>
+        `;
+
+    resource = `
+        ${viewer}
+
+        ${
+            url
+                ? `
+                    <p>
+                        <a
+                            href="${escapeHtml(url)}"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            Abrir o descargar presentación ↗
+                        </a>
+                    </p>
+                `
+                : ""
+        }
+    `;
+
+}
   }else if(m[1]==="document"){
     const isPdf=url&&/\.pdf(?:[?#]|$)/i.test(url);const viewer=isPdf?`<iframe class="resource-frame" src="${escapeHtml(url)}" title="${escapeHtml(m[2])}" referrerpolicy="strict-origin-when-cross-origin"></iframe>`:`<div class="notice">Documento enlazado. Pulsa para abrirlo o descargarlo.</div>`;
     resource=`${viewer}${url?`<p><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Abrir o descargar documento ↗</a></p>`:""}`;
