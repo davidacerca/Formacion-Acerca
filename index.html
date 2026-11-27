@@ -565,7 +565,7 @@ const supabaseClient = window.supabase &&
 ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 : null;
 
-let role="student", user=null, profile=null, current=0, done=[], contents=[], questions=[], topics=[];
+let role="student", appMode="student", user=null, profile=null, current=0, done=[], contents=[], questions=[], topics=[];
 let currentDetailUserId=null;
 let adminTopics=[], adminContents=[], allAdminTopics=[], allAdminContents=[], editingTopicId=null, editingContentId=null;
 let verticals=[], assignedVerticals=[], selectedVerticalId=null, adminSelectedVerticalId=null;
@@ -624,7 +624,7 @@ const names={zap:"energy",smartphone:"telecom",house:"mortgage",shield:"shield",
 return svgIcon(names[icon]||"layers",19);
 }
 function activeDataVerticalId(){
-return profile?.role==="admin"?adminSelectedVerticalId:selectedVerticalId;
+return appMode==="admin"?adminSelectedVerticalId:selectedVerticalId;
 }
 async function loadVerticalAccess(){
 const {data,error}=await supabaseClient.from("verticals")
@@ -786,7 +786,7 @@ showNotification({type:"student",title:count===1?"Tienes una nueva respuesta":"T
 }
 }
 async function checkAdminNotifications(initial=false){
-if(!profile||profile.role!=="admin")return;
+if(!profile||appMode!=="admin")return;
 const {data,error}=await supabaseClient.from("course_questions").select("id,subject,created_at,admin_seen_at").is("admin_seen_at",null).order("created_at",{ascending:false});
 if(error){console.error("No se pudieron comprobar notificaciones de consultas:",error);return;}
 const unseen=data||[];setBadge("commentsNavBadge",unseen.length);
@@ -802,7 +802,7 @@ function startNotificationPolling(){
 if(notificationTimer)clearInterval(notificationTimer);
 notificationTimer=setInterval(async()=>{
 if(!user||!profile)return;
-if(profile.role==="admin")await checkAdminNotifications(false);
+if(appMode==="admin")await checkAdminNotifications(false);
 else{
 try{await loadQuestions();await notifyStudentReplies(false);}catch(e){console.error("No se pudieron comprobar las respuestas:",e)}
 }
@@ -946,13 +946,14 @@ const {data:prof,error:profileError}=await supabaseClient
 .from("profiles").select("id,full_name,role").eq("id",user.id).single();
 if(profileError)throw profileError;
 profile=prof;
-if((role==="admin"&&profile.role!=="admin")||(role==="student"&&profile.role==="admin")){
+if(role==="admin"&&profile.role!=="admin"){
 await supabaseClient.auth.signOut();
 user=null;profile=null;
-throw new Error(role==="admin"
-?"Esta cuenta no tiene permisos de administrador."
-:"Selecciona Administrador para acceder con esta cuenta.");
+throw new Error("Esta cuenta no tiene permisos de administrador.");
 }
+// Los administradores conservan su rol real en Supabase y pueden elegir también el modo Formación.
+appMode=profile.role==="admin"&&role==="admin"?"admin":"student";
+try{sessionStorage.setItem("campus_formacion_mode",appMode)}catch(_){ }
 await loadVerticalAccess();
 await loadTopics();
 await loadContents();
@@ -977,7 +978,7 @@ async function loadTopics(){
 let query=supabaseClient.from("course_topics").select("id,title,description,position,is_active,created_at,vertical_id").order("position");
 const verticalId=activeDataVerticalId();
 if(verticalId)query=query.eq("vertical_id",verticalId);
-if(profile?.role!=="admin")query=query.eq("is_active",true);
+if(appMode!=="admin")query=query.eq("is_active",true);
 const {data,error}=await query;
 if(error)throw error;
 topics=data||[];
@@ -988,12 +989,12 @@ let query=supabaseClient.from("course_contents")
 .order("position");
 const verticalId=activeDataVerticalId();
 if(verticalId)query=query.eq("vertical_id",verticalId);
-if(profile?.role!=="admin")query=query.eq("is_active",true);
+if(appMode!=="admin")query=query.eq("is_active",true);
 const {data,error}=await query;
 if(error)throw error;
 contents=data||[];
 if(contents.length)mods=contents.map(normalizeContent);
-else mods=profile?.role==="admin"?fallbackMods:[];
+else mods=appMode==="admin"?fallbackMods:[];
 }
 async function loadProgress(){
 done=[];
@@ -1006,7 +1007,7 @@ done=contents.filter(c=>ids.has(c.id)).map(c=>c.slug);
 render();
 }
 async function loadQuestions(){
-if(!user||profile?.role==="admin")return;
+if(!user||appMode==="admin")return;
 let query=supabaseClient.from("course_questions")
 .select("id,subject,message,status,admin_reply,created_at,answered_at,student_reply_read_at,vertical_id")
 .eq("user_id",user.id).order("created_at",{ascending:false});
@@ -1020,7 +1021,7 @@ updateStudentReplyBadge();
 async function showApp(){
 document.getElementById("login").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
-const isAdmin=profile.role==="admin";
+const isAdmin=appMode==="admin";
 document.getElementById("studentArea").classList.toggle("hidden",isAdmin);
 document.getElementById("adminArea").classList.toggle("hidden",!isAdmin);
 document.getElementById("studentNav").classList.toggle("hidden",isAdmin);
@@ -1044,7 +1045,8 @@ async function logout(){
 if(notificationTimer){clearInterval(notificationTimer);notificationTimer=null;}
 stopVideoTracking();closeNotification();closeReplyModal();
 if(supabaseClient)await supabaseClient.auth.signOut();
-user=null;profile=null;done=[];questions=[];topics=[];adminTopics=[];adminContents=[];allAdminTopics=[];allAdminContents=[];adminQuestions=[];adminDirectory=[];adminAssignments=[];verticals=[];assignedVerticals=[];selectedVerticalId=null;adminSelectedVerticalId=null;
+user=null;profile=null;appMode="student";try{sessionStorage.removeItem("campus_formacion_mode")}catch(_){ }
+done=[];questions=[];topics=[];adminTopics=[];adminContents=[];allAdminTopics=[];allAdminContents=[];adminQuestions=[];adminDirectory=[];adminAssignments=[];verticals=[];assignedVerticals=[];selectedVerticalId=null;adminSelectedVerticalId=null;
 announcedStudentReplies=new Set();announcedAdminQuestions=new Set();
 document.getElementById("app").classList.add("hidden");
 document.getElementById("login").classList.remove("hidden");
@@ -1945,7 +1947,7 @@ if(r.error){console.error(r.error);alert("No se pudo cargar el panel. Comprueba 
 const emailById=new Map((dir.data||[]).map(x=>[String(x.id),x.email||""]));
 const profiles=(pr.data||[]).map(p=>({...p,email:emailById.get(String(p.id))||""}));
 const progressRows=prog.data||[];adminQuestions=qs.data||[];adminDirectory=profiles;adminAssignments=uv.data||[];
-const students=profiles.filter(p=>p.role!=="admin");
+const students=profiles;
 const trackedContents=publishedTrainingContents();const trackedIds=new Set(trackedContents.map(c=>String(c.id)));const total=trackedContents.length;
 const counts=new Map();
 progressRows.filter(row=>trackedIds.has(String(row.content_id))).forEach(row=>counts.set(row.user_id,(counts.get(row.user_id)||0)+1));
@@ -2060,7 +2062,7 @@ function exportCSV(){
 const cache=window._adminCache||{};const profiles=cache.profiles||[],progressRows=cache.progressRows||[],qs=cache.allQ||[];
 const trackedContents=publishedTrainingContents();const trackedIds=new Set(trackedContents.map(c=>String(c.id)));const total=trackedContents.length;
 const rows=[["Correo electrónico","Nombre","Progreso","Contenidos completados","Consultas","Formación finalizada"]];
-profiles.filter(p=>p.role!=="admin").forEach(p=>{
+profiles.forEach(p=>{
 const n=progressRows.filter(r=>String(r.user_id)===String(p.id)&&trackedIds.has(String(r.content_id))).length;
 rows.push([p.email||"",p.full_name||"",(total?Math.round(n/total*100):0)+"%",n,qs.filter(q=>String(q.user_id)===String(p.id)).length,total>0&&n>=total?"Sí":"No"]);
 });
@@ -2286,6 +2288,9 @@ const {data:prof,error:pe}=await supabaseClient.from("profiles")
 .select("id,full_name,role").eq("id",user.id).single();
 if(pe)throw pe;
 profile=prof;
+let savedMode="student";try{savedMode=sessionStorage.getItem("campus_formacion_mode")==="admin"?"admin":"student"}catch(_){ }
+appMode=profile.role==="admin"&&savedMode==="admin"?"admin":"student";
+role=appMode;
 await loadVerticalAccess();
 await loadTopics();
 await loadContents();
