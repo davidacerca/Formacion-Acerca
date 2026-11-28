@@ -266,18 +266,64 @@ button,input,textarea,select{font-size:inherit}button{transition:background .15s
 .bulk-users-card button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:800px){.bulk-users-grid{grid-template-columns:1fr}.bulk-users-card{padding:15px}}
 
+
+
+/* Revisión visual aprobada · formación y administración */
+#login .brand-mark,#login .role [data-icon],#app .brand-mark,#studentNav .nav-icon,#adminNav .nav-icon,#studentVerticalChevron,#app .logout [data-icon],#studentArea svg,#studentArea .cf-icon,#studentArea .icon,#a-summary svg,#a-summary .cf-icon,#a-courses svg,#a-courses .cf-icon,#a-comments svg,#a-comments .cf-icon,#a-users svg,#a-users .cf-icon,#notificationSymbol{display:none!important}
+#login .loginbox{padding:34px 38px}
+#login h1{display:none}
+#login .login-brand{justify-content:center;margin-bottom:20px}
+#login .login-brand .logo{text-align:center;font-size:24px}
+#login .login-brand .logo small{text-align:center}
+#login .sub{margin-top:0;margin-bottom:20px}
+#login .hint{font-size:10px;line-height:1.6}
+#app .brand{padding:4px 10px}
+#app .brand-copy{padding-left:0}
+#app .navitem{gap:0}
+#app .navitem.active{background:#223550;box-shadow:inset 3px 0 #2477e8;color:#fff}
+#app .navitem.active:hover{background:#283c5b}
+#app .main{max-width:none;padding:29px 34px 45px}
+#s-home .title{font-size:27px;margin:3px 0 5px}
+#s-home .top{margin-bottom:20px}
+.student-home-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(245px,310px);gap:17px;align-items:start}
+.student-home-primary{min-width:0}
+.student-home-primary .progress{margin-bottom:14px;padding:19px 21px}
+.student-home-primary #notice{margin-bottom:15px}
+.student-home-primary>.card:last-child{overflow:hidden}
+.student-home-aside{display:grid;gap:13px;min-width:0}
+.home-sidecard{overflow:hidden}
+.home-side-content{padding:0 18px 17px}
+.home-side-content .sectionsub{font-size:11px;line-height:1.55}
+.home-side-action{margin-top:13px;padding:8px 11px;font-size:11px}
+.home-vertical-list{padding:0 17px 9px}
+.home-vertical-row{display:flex;width:100%;justify-content:space-between;align-items:center;gap:9px;padding:12px 2px;border:0;border-top:1px solid #edf0f4;background:white;text-align:left;color:#26344a}
+.home-vertical-row:first-child{border-top:0}
+.home-vertical-row b{font-size:11px}
+.home-vertical-row small{display:block;color:#718099;font-size:10px;margin-top:4px}
+.home-vertical-row.selected b{color:#2477e8}
+.home-vertical-arrow{color:#8793a4;font-size:17px}
+#s-home .module{gap:12px}
+#s-home .module .mi{min-width:0}
+#adminArea .top{align-items:center}
+#adminArea .title{font-size:27px}
+#adminArea .cards{gap:13px}
+#adminArea .stat{padding:18px 19px}
+#adminArea .stat b{font-size:27px}
+@media(max-width:980px){.student-home-grid{grid-template-columns:minmax(0,1fr) 250px}}
+@media(max-width:760px){.student-home-grid{grid-template-columns:1fr}.student-home-aside{grid-template-columns:1fr 1fr}.home-vertical-list{padding-bottom:9px}}
+@media(max-width:650px){.student-home-aside{grid-template-columns:1fr}.student-home-primary .progress{padding:16px}.home-side-action{width:100%}}
 </style>
 </head>
 <body>
 
 <div id="login" class="login">
 <div class="loginbox">
-<div class="login-brand"><span class="brand-mark" data-icon="layers" data-icon-size="22"></span><div class="logo">Campus Formación<small>GRUPO ACERCA</small></div></div>
-<h1>Acceso a la plataforma</h1>
+<div class="login-brand"><div class="logo">Campus Formación<small>GRUPO ACERCA</small></div></div>
+
 <div class="sub">Selecciona tu perfil para continuar</div>
 <div class="roles">
-<button id="rStudent" class="role active" type="button" onclick="setRole('student')"><span data-icon="graduation-cap"></span> Formación</button>
-<button id="rAdmin" class="role" type="button" onclick="setRole('admin')"><span data-icon="users"></span> Administrador</button>
+<button id="rStudent" class="role active" type="button" onclick="setRole('student')">Formación</button>
+<button id="rAdmin" class="role" type="button" onclick="setRole('admin')">Administrador</button>
 </div>
 <div id="err" class="error hidden"></div>
 <label id="ulabel" for="user">Correo electrónico</label>
@@ -287,13 +333,13 @@ button,input,textarea,select{font-size:inherit}button{transition:background .15s
 <input id="pass" type="password" autocomplete="current-password" placeholder="Introduce tu contraseña">
 </div>
 <button id="loginButton" class="primary" type="button" onclick="login()">Acceder</button>
-<div class="hint">Acceso seguro · Grupo Acerca<br>Si no tienes contraseña, contacta con el administrador de formación.</div>
+<div class="hint">Acceso seguro · Grupo Acerca<br>Si necesitas ayuda, contacta con el equipo de formación.</div>
 </div>
 </div>
 
 <div id="app" class="app hidden">
 <aside class="side">
-<div class="brand"><span class="brand-mark" data-icon="layers" data-icon-size="21"></span><span class="brand-copy">Campus Formación<small id="brandRole">FORMACIÓN · GRUPO ACERCA</small></span></div>
+<div class="brand"><span class="brand-copy">Campus Formación<small id="brandRole">FORMACIÓN · GRUPO ACERCA</small></span></div>
 <div id="studentNav" class="nav">
 <div class="navtitle">Mi formación</div>
 <div id="studentVerticalToggle" class="navitem vertical-toggle active" role="button" tabindex="0" aria-expanded="true" onclick="toggleStudentVerticals()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStudentVerticals()}">
@@ -322,7 +368,7 @@ button,input,textarea,select{font-size:inherit}button{transition:background .15s
 <div id="studentArea">
 <section id="s-home">
 <div class="top"><div><div class="eyebrow">MI FORMACIÓN</div><h1 class="title">Bienvenido</h1><div class="subtitle">Estás en <b id="studentVerticalTitle">tu formación</b>. Continúa desde el punto en el que lo dejaste.</div></div></div>
-<div class="card progress">
+<div class="student-home-grid"><div class="student-home-primary"><div class="card progress">
 <div class="phead"><span>Progreso de la formación</span><span id="hp">0%</span></div>
 <div class="pbar"><div id="hb" class="pfill" style="width:0%"></div></div>
 </div>
@@ -331,6 +377,10 @@ button,input,textarea,select{font-size:inherit}button{transition:background .15s
 <div class="sectionhead"><div class="sectiontitle">Contenido de la formación</div><div class="sectionsub">Los contenidos se desbloquean en orden.</div></div>
 <div id="homeModules"></div>
 </div>
+<aside class="student-home-aside">
+<div class="card home-sidecard"><div class="sectionhead"><div class="sectiontitle">Dudas sobre el curso</div></div><div class="home-side-content"><div id="homeQuestionSummary" class="sectionsub">Consulta tus preguntas y las respuestas del equipo de formación.</div><button class="secondary home-side-action" type="button" onclick="studentPage('doubts',studentNavPageElement('doubts'))">Ver mis consultas</button></div></div>
+<div class="card home-sidecard"><div class="sectionhead"><div class="sectiontitle">Mis verticales</div></div><div id="homeVerticalList" class="home-vertical-list"></div></div>
+</aside></div>
 </section>
 
 <section id="s-additional" class="hidden">
@@ -658,6 +708,11 @@ if(toggle){toggle.setAttribute("aria-expanded",String(studentVerticalsExpanded))
 const chevron=document.getElementById("studentVerticalChevron");if(chevron){chevron.innerHTML=svgIcon("chevron-down",16);}
 const active=assignedVerticals.find(v=>String(v.id)===String(selectedVerticalId));
 const title=document.getElementById("studentVerticalTitle");if(title)title.textContent=active?.name||"tu formación";
+renderStudentHomeVerticals();
+}
+function renderStudentHomeVerticals(){
+const box=document.getElementById("homeVerticalList");if(!box)return;
+box.innerHTML=assignedVerticals.map(v=>`<button class="home-vertical-row ${String(v.id)===String(selectedVerticalId)?"selected":""}" type="button" onclick="selectStudentVertical('${escapeHtml(v.id)}',this)"><span><b>${escapeHtml(v.name)}</b><small>${String(v.id)===String(selectedVerticalId)?"Vertical seleccionada":"Ver contenidos"}</small></span><span class="home-vertical-arrow">›</span></button>`).join("")||'<div class="empty">No tienes verticales asignadas.</div>';
 }
 function toggleStudentVerticals(){
 studentVerticalsExpanded=!studentVerticalsExpanded;
@@ -756,7 +811,7 @@ notificationAction=action;modal.classList.remove("hidden");
 }
 function closeNotification(){document.getElementById("notificationModal")?.classList.add("hidden");notificationAction=null;}
 function runNotificationAction(){const action=notificationAction;closeNotification();if(typeof action==="function")action();}
-function updateStudentReplyBadge(){setBadge("studentReplyBadge",questions.filter(questionUnreadForStudent).length)}
+function updateStudentReplyBadge(){const count=questions.filter(questionUnreadForStudent).length;setBadge("studentReplyBadge",count);const summary=document.getElementById("homeQuestionSummary");if(summary)summary.textContent=count?`Tienes ${count} ${count===1?"respuesta nueva":"respuestas nuevas"} del equipo de formación.`:"Consulta tus preguntas y las respuestas del equipo de formación.";}
 function updateAdminQuestionBadge(){setBadge("commentsNavBadge",adminQuestions.filter(q=>!q.admin_seen_at).length)}
 async function markStudentRepliesRead(){
 const unread=questions.filter(questionUnreadForStudent);
